@@ -18,8 +18,8 @@ You will be asked to provide values for certain keys. The `name` will default to
 the current directory. It's perfectly fine to just enter through everything.
 This will create a `package.json` file. This file defines everything about your
 package in order to publish it to npm, define  development dependencies and
-project dependencies, to run arbitrary scripts, as well interoperate with other
-tools. For example, linters, like [jshint][jshint] can have it's options
+project dependencies, to run arbitrary scripts, as well as interoperate with
+other tools. For example, linters, like [jshint][jshint] can have it's options
 specified from either a `.jshintrc` file or inside `package.json` under the
 `jshint` key. After running this, my `package.json` looks like this (I switched
 to MIT license):
@@ -46,13 +46,33 @@ to MIT license):
 }
 ```
 
+## Getting Dependencies
 
+Let's get started by downloading [bionode-ncbi][bionode-ncbi] **and** making
+sure to store it under our dependencies by using the `--save` option:
 
+```bash
+npm install bionode-ncbi --save
+```
 
+You'll now notice the following has been added to the `package.json`
 
+```json
+{
+    ...
+    "dependencies": {
+        "bionode-ncbi": "^1.6.0"
+    }
+}
+```
 
-
-
+As well, `bionode-ncbi` lives at `node_modules/bionode-ncbi`. You don't commit
+this `node_modules` folder - when someone downloads this package they can simply
+run `npm install` and it will install everything under the `dependencies` and
+`devDependencies` keys. Thus managing dependencies in the npm ecosystem is
+simple *and* robust. Note as well, when we installed bionode-ncbi, it ran `npm
+install` inside the bionode-ncbi folder, and ever deeper for each dependency.
 
 
 [jshint]: http://jshint.com/
+[bionode-ncbi]: https://github.com/bionode/bionode-ncbi

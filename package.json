@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/thejmazz/js-bioinformatics-exercise/issues"
   },
-  "homepage": "https://github.com/thejmazz/js-bioinformatics-exercise#readme"
+  "homepage": "https://github.com/thejmazz/js-bioinformatics-exercise#readme",
+  "dependencies": {
+    "bionode-ncbi": "^1.6.0"
+  }
 }
