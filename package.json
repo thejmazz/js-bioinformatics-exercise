@@ -1,0 +1,19 @@
+{
+  "name": "js-bioinformatics-exercise",
+  "version": "1.0.0",
+  "description": "The tutorial for this [exercise][exercise] as part of my presentation on [JavaScript and Bioinformatics][js-and-bioinformatics].",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thejmazz/js-bioinformatics-exercise.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/thejmazz/js-bioinformatics-exercise/issues"
+  },
+  "homepage": "https://github.com/thejmazz/js-bioinformatics-exercise#readme"
+}
