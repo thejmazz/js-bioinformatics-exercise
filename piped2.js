@@ -1,7 +1,11 @@
 var ncbi = require('bionode-ncbi');
 var es = require('event-stream');
 var filter = require('through2-filter');
-var toArray = require('stream-to-array');
+var concat = require('concat-stream');
+
+var concatStream = concat(function(array) {
+    console.log(array);
+});
 
 ncbi.search('protein', 'mbp1')
     .pipe(filter.obj(function (obj) {
@@ -11,8 +15,12 @@ ncbi.search('protein', 'mbp1')
         this.emit('data', obj.gi + '\n');
     }))
     .pipe(ncbi.fetch('protein'))
-    .pipe(es.stringify())
-    .pipe(es.through(function (str) {
-        this.emit('data', str);
-    }))
-    .pipe(process.stdout);
+    .pipe(concatStream);
+    // .pipe(es.stringify())
+    // .pipe(es.through(function (str) {
+    //     this.emit('data', str);
+    // }))
+    // .pipe(process.stdout);
+    // .pipe(accum.array(function (array) {
+    //     console.log(array);
+    // }));
