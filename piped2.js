@@ -1,7 +1,9 @@
 var ncbi = require('bionode-ncbi');
+// Stream utilities
 var es = require('event-stream');
 var filter = require('through2-filter');
 var concat = require('concat-stream');
+var tool = require('tool-stream');
 
 var concatStream = concat(function(array) {
     console.log(array);
@@ -11,16 +13,6 @@ ncbi.search('protein', 'mbp1')
     .pipe(filter.obj(function (obj) {
         return obj.title.match(/^Mbp1p \[Saccharomyces cerevisiae [^Y]/);
     }))
-    .pipe(es.through(function (obj) {
-        this.emit('data', obj.gi + '\n');
-    }))
+    .pipe(tool.extractProperty('gi'))
     .pipe(ncbi.fetch('protein'))
     .pipe(concatStream);
-    // .pipe(es.stringify())
-    // .pipe(es.through(function (str) {
-    //     this.emit('data', str);
-    // }))
-    // .pipe(process.stdout);
-    // .pipe(accum.array(function (array) {
-    //     console.log(array);
-    // }));

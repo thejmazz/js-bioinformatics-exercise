@@ -17,14 +17,13 @@
   },
   "homepage": "https://github.com/thejmazz/js-bioinformatics-exercise#readme",
   "dependencies": {
-    "accum": "^0.3.6",
     "bionode-ncbi": "^1.6.0",
     "concat-stream": "^1.5.1",
     "event-stream": "^3.3.2",
     "express": "^4.13.3",
     "msa": "^0.4.8",
     "serve-index": "^1.7.2",
-    "stream-to-array": "^2.2.0",
-    "through2-filter": "^2.0.0"
+    "through2-filter": "^2.0.0",
+    "tool-stream": "^0.2.1"
   }
 }
