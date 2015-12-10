@@ -59,7 +59,6 @@ You'll now notice the following has been added to the `package.json`
 
 ```json
 {
-    ...
     "dependencies": {
         "bionode-ncbi": "^1.6.0"
     }
@@ -73,6 +72,45 @@ run `npm install` and it will install everything under the `dependencies` and
 simple *and* robust. Note as well, when we installed bionode-ncbi, it ran `npm
 install` inside the bionode-ncbi folder, and ever deeper for each dependency.
 
+## bionode-ncbi
+
+Refer to my [slide][slide-bionode-ncbi-api] overviewing the bionode-ncbi API.
+
+![bionode-ncbi-api](img/bionode-ncbi-api.png)
+
+This allows us to access the NCBI [E-utilities][e-utilities] through callbacks,
+events, and streams. Which to use is up to you. Check out
+[try-bionode-esnext][try-bionode-esnext]. This uses ES6 syntax but the concepts
+are the same. For this tutorial I'll stick to ES5 however. Let's start writing
+`main.js`:
+
+```js
+var ncbi = require('bionode-ncbi');
+var fs = require('fs');
+
+var query = ncbi.search('protein', 'mbp1');
+
+function dataLogger(data) {
+    // Assumes `data` directory already exists
+    var fileName = 'data/' + data.uid + '.json';
+    fs.writeFileSync(fileName, JSON.stringify(data));
+    console.log('Wrote ' + fileName);
+}
+
+query.on('data', dataLogger);
+```
+
+We require `bionode-ncbi` and `fs` (filesystem) modules. `query` is the object
+returned by `ncbi.search`. It emits a `data` event, which we catch and pass
+`dataLogger` as the callback. This simply writes the retrieved JSON to the
+folder `data`. (You will need to `mkdir data` first - just didn't want to
+introduce checking if the dir exists, then make it, etc. into this minimal
+example).
+
+At this point you can `ls data` and see what turned up!
 
 [jshint]: http://jshint.com/
 [bionode-ncbi]: https://github.com/bionode/bionode-ncbi
+[slide-bionode-ncbi-api]: http://slides.com/jmazz/js-bioinformatics/fullscreen#/11
+[e-utilities]: http://www.ncbi.nlm.nih.gov/books/NBK25500/
+[try-bionode-esnext]: https://gist.github.com/thejmazz/fbec1d50e6ed14401ad9
