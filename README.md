@@ -107,14 +107,45 @@ folder `data`. (You will need to `mkdir data` first - just didn't want to
 introduce checking if the dir exists, then make it, etc. into this minimal
 example).
 
+To run this,
+
+```bash
+node main.js
+```
+
 At this point you can `ls data` and see what turned up!
 
-![protein-mbp1-jsons](img/protein-mbp1-jsons.png)
+There are quite a lot of results. These are all from different organisms. To be
+able to quickly browse through them, we can set up an [express][express] static
+file server with [serve-index][serve-index], `server.js`:
 
-There are quite a lot of results. These are all from different organisms. 
+```js
+var express = require('express');
+var serveIndex = require('serve-index');
+
+var app = express();
+
+app.use(serveIndex('data'));
+app.use(express.static('data'));
+
+app.listen(3000);
+
+console.log('Express server listening on port 3000');
+```
+
+Start the serve with `node server.js` and navigate to `http://localhost:3000` in
+your web browser. You can now easily browse through the files. I *highly*
+recommend the Chrome addon [JSON
+Formatter](JSON-Formatter). This is what you should see:
+
+![data-server](img/data-server.png)
+
 
 [jshint]: http://jshint.com/
 [bionode-ncbi]: https://github.com/bionode/bionode-ncbi
 [slide-bionode-ncbi-api]: http://slides.com/jmazz/js-bioinformatics/fullscreen#/11
 [e-utilities]: http://www.ncbi.nlm.nih.gov/books/NBK25500/
 [try-bionode-esnext]: https://gist.github.com/thejmazz/fbec1d50e6ed14401ad9
+[express]: http://expressjs.com/en/index.html
+[serve-index]: https://github.com/expressjs/serve-index
+[JSON-Formatter]: https://chrome.google.com/webstore/detail/json-formatter/bcjindcccaagfpapjjmafapmmgkkhgoa?hl=en
