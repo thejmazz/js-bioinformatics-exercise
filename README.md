@@ -434,7 +434,31 @@ came in from the Internet? It would - and this is called a
 dealing with BLOB streams please let me know, a quick Google search brought
 [this](https://cran.r-project.org/web/packages/stream/vignettes/stream.pdf) but
 that does not appear at first glance terribly similar. Stream support in R would
-make for  interoperability with bionode/gasket.
+make for fantastic interoperability with bionode/gasket.
+
+Lets revisit this data acquisition and filtering pipeline in the context of the
+stream APIs bionode provides, in `piped.js`:
+
+```js
+var ncbi = require('bionode-ncbi');
+var es = require('event-stream');
+var filter = require('through2-filter');
+
+ncbi.search('protein', 'mbp1')
+    .pipe(filter.obj(function (obj) {
+        return obj.title.match(/^Mbp1p \[Saccharomyces cerevisiae/);
+    }))
+    .pipe(es.through(function (data) {
+        this.emit('data', data.title + '\n');
+    }))
+    .pipe(process.stdout);
+```
+
+That produces this [output]().
+
+Why didn't we just do this in the first place you might ask? It's very important
+to understand callbacks - also, these different approaches may be superior
+in different scenarios. 
 
 [jshint]: http://jshint.com/
 [bionode-ncbi]: https://github.com/bionode/bionode-ncbi
