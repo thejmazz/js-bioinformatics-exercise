@@ -388,21 +388,24 @@ valid JS). In this case the order is not too important so I just threw the uids
 in there. Finally, when `tryFinish` discovers that we have in fact processed
 every file, it calls `cb` with the `null` as the error, and the produced data.
 
-You might be beginning to notice what is called
-**callback hell**. There are methods to avoid this endlessly indented dread
-however - you can chain `.then()`s of [Promises][promise-mdn] (See also
+You might be beginning to notice what is called **callback hell**. There are
+methods to avoid this endlessly indented dread however - you can chain
+`.then()`s of [Promises][promise-mdn] (See also
 [bluebird](https://github.com/petkaantonov/bluebird),
 [q](https://github.com/kriskowal/q)). ES6 introduces
 [generators](http://www.2ality.com/2015/03/no-promises.html) which are a neat
 type of "iterator" that you can pass in data to them mid state with
 `next(datum)`. Promises and generators can be combined (in a way which was not
-originally intended but works great!) and run through a "generator engine" of
+originally intended but works great!) and ran through a "generator engine" of
 some sort (like [co](https://github.com/tj/co)) and the result is **asynchronous
 code that looks synchronous**. Co essentially implements what is in the draft
 for ES7, `async/await`. Check out [try-bionode-esnext][try-bionode-esnext] to
 see this next-next-generation JS put to use to consume callbacks without
-indenting. Extra note: `Promise.all([...])` is also quite useful and can be used
-to wait for a bunch of async operations to finish.
+indenting. Browsers are [beginning to
+implement](https://kangax.github.io/compat-table/es6/) ES6 features, in the
+meantime you can use [Babel](http://babeljs.io/) to transpile ES6 into ES5.
+Extra note: `Promise.all([...])` is also quite useful and can be used to wait
+for a bunch of async operations to finish.
 
 That was quite a bit. But if you got here, and understand `collect-seqs.js`
 thats great. Coming to grips with callbacks is central to understanding how
