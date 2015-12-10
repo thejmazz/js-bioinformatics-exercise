@@ -22,6 +22,7 @@
     "express": "^4.13.3",
     "msa": "^0.4.8",
     "serve-index": "^1.7.2",
+    "stream-to-array": "^2.2.0",
     "through2-filter": "^2.0.0"
   }
 }

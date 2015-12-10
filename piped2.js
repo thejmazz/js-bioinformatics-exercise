@@ -1,6 +1,7 @@
 var ncbi = require('bionode-ncbi');
 var es = require('event-stream');
 var filter = require('through2-filter');
+var toArray = require('stream-to-array');
 
 ncbi.search('protein', 'mbp1')
     .pipe(filter.obj(function (obj) {
