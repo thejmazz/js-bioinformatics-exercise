@@ -421,6 +421,21 @@ produces. Lines `156` to `257` look interesting, they are all from
 now though - let's just compare everything - the filtering function is not that
 clean and fairly  hardcoded.
 
+## Pipes
+
+As you can see, this data filtering pipeline which has been developed so far is
+beginning to become clouded by async idioms and basically - code. It's important
+to keep a clear and concise focus on what our code should achieve and how the
+purpose is readable from an outside observer. Yes, new ES6/ES7 features can make
+it much cleaner, but we are wasting time repeatedly writing and reading files.
+Wouldn't it be great if there was some way to process data piece by piece as it
+came in from the Internet? It would - and this is called a
+[stream](https://nodejs.org/api/stream.html). If there is a package for R for
+dealing with BLOB streams please let me know, a quick Google search brought
+[this](https://cran.r-project.org/web/packages/stream/vignettes/stream.pdf) but
+that does not appear at first glance terribly similar. Stream support in R would
+make for  interoperability with bionode/gasket.
+
 [jshint]: http://jshint.com/
 [bionode-ncbi]: https://github.com/bionode/bionode-ncbi
 [slide-bionode-ncbi-api]: http://slides.com/jmazz/js-bioinformatics/fullscreen#/11
