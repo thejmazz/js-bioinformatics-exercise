@@ -379,14 +379,17 @@ proteins.forEach(function(protein) {
 
 Instead of writing an inline function, `check` is declared elsewhere. `check` is
 an *impure* function which has side effects - it increments `num` each time it
-is called. When `check` finished what it does it will call `tryFinish`. `tryFinish`
-simple checks if `num === proteins.length`, i.e. have all the files been read
-and parsed. We do not know the order that these files were processed - and it will
-be different each time. Thus, an alternative is to assign the result into a fixed
-index in an array (yes, `var a = []; a[5] = 'five'` is totally valid JS). In this
-case the order is not too important so I just through the uids in there. Finally,
-when `tryFinish` discovers that we have in fact processed every file, it calls
-`cb` with the data.
+is called. When `check` is finished what it it will call `tryFinish`.
+`tryFinish` simply checks if `num === proteins.length`, i.e. have all the files
+been read and parsed. We do not know the order that these files were processed -
+and it will be different each time. Thus, an alternative is to assign the result
+into a fixed index in an array (yes, `var a = []; a[5] = 'five'` is totally
+valid JS). In this case the order is not too important so I just threw the uids
+in there. Finally, when `tryFinish` discovers that we have in fact processed
+every file, it calls `cb` with the `null` as the error, and the produced data.
+
+Take a look at the [output][collect-seqs-output] `node collect-seqs.js`
+produces.
 
 [jshint]: http://jshint.com/
 [bionode-ncbi]: https://github.com/bionode/bionode-ncbi
@@ -397,3 +400,4 @@ when `tryFinish` discovers that we have in fact processed every file, it calls
 [serve-index]: https://github.com/expressjs/serve-index
 [JSON-Formatter]: https://chrome.google.com/webstore/detail/json-formatter/bcjindcccaagfpapjjmafapmmgkkhgoa?hl=en
 [eFetch]: http://www.ncbi.nlm.nih.gov/books/NBK25497/table/chapter2.T._entrez_unique_identifiers_ui/?report=objectonly
+[output]: https://github.com/thejmazz/js-bioinformatics-exercise/blob/master/outputs/collect-seqs.txt
