@@ -426,7 +426,7 @@ app.use('/data', express.static('data'));
 app.use(express.static('public'));
 ```
 
-View it in chrome and open up developer tools (`cmd`+`option`+`i` on OS X, or right-click->inspect). You will see there is an `Uncaught TypeError`:
+View it in chrome and open up developer tools (`cmd`+`option`+`i` on OS X, or right-click->inspect). You will see there is an error:
 
 ```
 Uncaught TypeError: Cannot read property 'write' of undefined, index.js:6
@@ -462,7 +462,9 @@ In `node_modules/bionode-ncbi/node_modules/nugget/package.json` I added
 }
 ```
 
-Essentially just ignoring the module that is causing the issue.
+Essentially just ignoring the module that is causing the issue. This is safe
+because `single-line-log` won't get used unless we use the `verbose` option -
+which apparently is not being passed due to this hack working..
 [browser-stdout](https://github.com/kumavis/browser-stdout) and
 [process](https://www.npmjs.com/package/process) exist, and perhaps I'll put
 together a pull request implementing those sometime.
