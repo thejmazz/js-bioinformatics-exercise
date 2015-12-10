@@ -2,6 +2,8 @@ var ncbi = require('bionode-ncbi');
 var es = require('event-stream');
 var filter = require('through2-filter');
 
+console.log(Object.keys(dat));
+
 ncbi.search('protein', 'mbp1')
     .pipe(filter.obj(function (obj) {
         return obj.title.match(/^Mbp1p \[Saccharomyces cerevisiae [^Y]/);

@@ -461,13 +461,26 @@ to understand callbacks - also, these different approaches may be superior
 in different scenarios.
 
 There are a lot of `YJM*` strains - let's just take these out for now and
-compare `EC1118`, `R008`, `P301`, and `JAY291`. The regex is changed to
+compare `EC1118`, `R008`, `P301`, and `JAY291`. The regex is changed to `/^Mbp1p \[Saccharomyces cerevisiae [^Y]/` in `piped2.js` as well as some other changes:
 
 ```js
-/^Mbp1p \[Saccharomyces cerevisiae [^Y]/
+ncbi.search('protein', 'mbp1')
+    .pipe(filter.obj(function (obj) {
+        return obj.title.match(/^Mbp1p \[Saccharomyces cerevisiae [^Y]/);
+    }))
+    .pipe(es.through(function (obj) {
+        this.emit('data', obj.gi + '\n');
+    }))
+    .pipe(ncbi.fetch('protein'))
+    .pipe(es.stringify())
+    .pipe(es.through(function (str) {
+        this.emit('data', str + '\n');
+    }))
+    .pipe(process.stdout);
 ```
 
-in `piped2.js` and produces this [output](https://github.com/thejmazz/js-bioinformatics-exercise/blob/master/outputs/piped2.txt).
+and produces this
+[output](https://github.com/thejmazz/js-bioinformatics-exercise/blob/master/outputs/piped2.txt).
 
 [jshint]: http://jshint.com/
 [bionode-ncbi]: https://github.com/bionode/bionode-ncbi
