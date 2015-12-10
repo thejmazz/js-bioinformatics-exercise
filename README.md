@@ -454,11 +454,11 @@ ncbi.search('protein', 'mbp1')
     .pipe(process.stdout);
 ```
 
-That produces this [output]().
+That produces this [output](https://github.com/thejmazz/js-bioinformatics-exercise/blob/master/outputs/piped1.txt).
 
 Why didn't we just do this in the first place you might ask? It's very important
 to understand callbacks - also, these different approaches may be superior
-in different scenarios. 
+in different scenarios.
 
 [jshint]: http://jshint.com/
 [bionode-ncbi]: https://github.com/bionode/bionode-ncbi
