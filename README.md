@@ -146,11 +146,12 @@ I like browsing through these JSONS more than the webpage search results. It
 just feels more semantic. Would be nice to implement left/right arrow to move
 between the files..but for now this suits our purposes to get a quick overview
 of the data we are dealing with..and more specifically, the general format. One
-way to generate a generic schema would be too loop through each file and keep
-track of the keys and `typeof(result[key])` that are common among all. This
-is what `1431055.json` looks like (disclaimer: I got `1431055` from the web
-results - instead of looking through each file - we could do that programmatically
-of course though):
+way to generate a generic schema would be to loop through each file and keep
+track of the keys and `typeof(result[key])` that are common among all.
+
+This is what `1431055.json` looks like (disclaimer: I got `1431055` from the web
+results - instead of looking through each file - we could do that
+programmatically of course though):
 
 ```json
 {
@@ -276,6 +277,28 @@ of course though):
 }
 ```
 
+## Multiple Sequence Alignment
+
+We have all these results for Mbp1 proteins in different organisms - why not
+run an MSA and see if any regions are more conserved than others? To do this
+we will need to retrieve sequences. For that, we can use the `fetch` function
+from bionode-ncbi. Check out the table for [Entrez eFetch Databases](eFetch).
+Run the following just to test it out (after installing bionode-ncbi globally
+so we can use it in the shell - `npm install -g bionode-ncbi`):
+
+```bash
+bionode-ncbi fetch protein 1431055
+```
+
+This returns:
+
+```json
+{
+    "id":"gi|1431055|emb|CAA98618.1| MBP1 [Saccharomyces cerevisiae]",
+    "seq":"MSNQIYSARYSGVDVYEFIHSTGSIMKRKKDDWVNATHILKAANFAKAKRTRILEKEVLKETHEKVQGGFGKYQGTWVPLNIAKQLAEKFSVYDQLKPLFDFTQTDGSASPPPAPKHHHASKVDRKKAIRSASTSAIMETKRNNKKAEENQFQSSKILGNPTAAPRKRGRPVGSTRGSRRKLGVNLQRSQSDMGFPRPAIPNSSISTTQLPSIRSTMGPQSPTLGILEEERHDSRQQQPQQNNSAQFKEIDLEDGLSSDVEPSQQLQQVFNQNTGFVPQQQSSLIQTQQTESMATSVSSSPSLPTSPGDFADSNPFEERFPGGGTSPIISMIPRYPVTSRPQTSDINDKVNKYLSKLVDYFISNEMKSNKSLPQVLLHPPPHSAPYIDAPIDPELHTAFHWACSMGNLPIAEALYEAGTSIRSTNSQGQTPLMRSSLFHNSYTRRTFPRIFQLLHETVFDIDSQSQTVIHHIVKRKSTTPSAVYYLDVVLSKIKDFSPQYRIELLLNTQDKNGDTALHIASKNGDVVFFNTLVKMGALTTISNKEGLTANEIMNQQYEQMMIQNGTNQHVNSSNTDLNIHVNTNNIETKNDVNSMVIMSPVSPSDYITYPSQIATNISRNIPNVVNSMKQMASIYNDLHEQHDNEIKSLQKTLKSISKTKIQVSLKTLEVLKESSKDENGEAQTNDDFEILSRLQEQNTKKLRKRLIRYKRLIKQKLEYRQTVLLNKLIEDETQATTNNTVEKDNNTLERLELAQELTMLQLQRKNKLSSLVKKFEDNAKIHKYRRIIREGTEMNIEEVDSSLDVILQTLIANNNKNKGAEQIITISNANSHA"
+}
+```
+
 [jshint]: http://jshint.com/
 [bionode-ncbi]: https://github.com/bionode/bionode-ncbi
 [slide-bionode-ncbi-api]: http://slides.com/jmazz/js-bioinformatics/fullscreen#/11
@@ -284,3 +307,4 @@ of course though):
 [express]: http://expressjs.com/en/index.html
 [serve-index]: https://github.com/expressjs/serve-index
 [JSON-Formatter]: https://chrome.google.com/webstore/detail/json-formatter/bcjindcccaagfpapjjmafapmmgkkhgoa?hl=en
+[eFetch]: http://www.ncbi.nlm.nih.gov/books/NBK25497/table/chapter2.T._entrez_unique_identifiers_ui/?report=objectonly
