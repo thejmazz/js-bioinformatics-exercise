@@ -480,7 +480,7 @@ ncbi.search('protein', 'mbp1')
 ```
 
 and produces this
-[output](https://github.com/thejmazz/js-bioinformatics-exercise/blob/master/outputs/piped2.txt).
+[output][piped2.txt] which is newline delimited json.
 
 [jshint]: http://jshint.com/
 [bionode-ncbi]: https://github.com/bionode/bionode-ncbi
@@ -493,3 +493,4 @@ and produces this
 [eFetch]: http://www.ncbi.nlm.nih.gov/books/NBK25497/table/chapter2.T._entrez_unique_identifiers_ui/?report=objectonly
 [collect-seqs-output]: https://github.com/thejmazz/js-bioinformatics-exercise/blob/master/outputs/collect-seqs.txt
 [promise-mdn]:https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Promise
+[piped2.txt]:https://github.com/thejmazz/js-bioinformatics-exercise/blob/master/outputs/piped2.txt
