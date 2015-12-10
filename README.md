@@ -475,6 +475,40 @@ into the browser. It's unlikely the
 [single-line-log](https://github.com/freeall/single-line-log) author expected
 his module to be used in the browser.
 
+I've written
+[fix-nugget](https://github.com/thejmazz/js-bioinformatics-exercise/blob/master/fix-nugget.js)
+for this, and added it the postinstall script. So now at least anyone pulling
+*this* repository won't have those issues.
+
+### BioJS: MSA
+
+Browsing through the [msa readme](https://github.com/greenify/msa), I took the
+"b) Import your own seqs" snippet and added in a console.log, `msa.js`:
+
+```js
+var msa = require("msa");
+var sequences = msa.utils.seqgen.genConservedSequences(10,30, "ACGT-");
+
+var m = new msa({
+    el: rootDiv,
+    seqs: sequences
+});
+m.render()
+
+// contents of piped2.js
+```
+
+Then ran `npm run bundle`. (see `scripts` in `package.json`). I logged `sequences`
+so I can determine the schema msa wants..something which was missing from their
+documentation. Comparing the generated array, and our pipe created array,
+they look fairly similar.
+
+![msa](img/msa1.png)
+
+We just need to refine `id`, produce `name`. `meta` is an empty object so we
+can probably leave that for now.
+
+
 [jshint]: http://jshint.com/
 [bionode-ncbi]: https://github.com/bionode/bionode-ncbi
 [slide-bionode-ncbi-api]: http://slides.com/jmazz/js-bioinformatics/fullscreen#/11

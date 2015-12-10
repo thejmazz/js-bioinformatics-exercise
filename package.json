@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "bundle": "browserify piped2.js -o public/bundle.js --debug -r fs:browserify-fs",
+    "bundle": "browserify msa.js -o public/bundle.js --debug -r fs:browserify-fs",
     "fix-nugget": "node fix-nugget.js",
     "postinstall": "npm run fix-nugget"
   },
