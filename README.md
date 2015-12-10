@@ -467,7 +467,7 @@ compare `EC1118`, `R008`, `P301`, and `JAY291`. The regex is changed to
 /^Mbp1p \[Saccharomyces cerevisiae [^Y]/
 ```
 
-in `piped2.js` and produces [this](output).
+in `piped2.js` and produces this [output](https://github.com/thejmazz/js-bioinformatics-exercise/blob/master/outputs/piped2.txt).
 
 [jshint]: http://jshint.com/
 [bionode-ncbi]: https://github.com/bionode/bionode-ncbi
