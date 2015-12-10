@@ -460,6 +460,15 @@ Why didn't we just do this in the first place you might ask? It's very important
 to understand callbacks - also, these different approaches may be superior
 in different scenarios.
 
+There are a lot of `YJM*` strains - let's just take these out for now and
+compare `EC1118`, `R008`, `P301`, and `JAY291`. The regex is changed to
+
+```js
+/^Mbp1p \[Saccharomyces cerevisiae [^Y]/
+```
+
+in `piped2.js` and produces [this](output).
+
 [jshint]: http://jshint.com/
 [bionode-ncbi]: https://github.com/bionode/bionode-ncbi
 [slide-bionode-ncbi-api]: http://slides.com/jmazz/js-bioinformatics/fullscreen#/11

@@ -1,0 +1,4 @@
+Mbp1p [Saccharomyces cerevisiae EC1118]
+Mbp1p [Saccharomyces cerevisiae R008]
+Mbp1p [Saccharomyces cerevisiae P301]
+Mbp1p [Saccharomyces cerevisiae JAY291]
