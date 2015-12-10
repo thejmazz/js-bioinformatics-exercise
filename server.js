@@ -3,8 +3,10 @@ var serveIndex = require('serve-index');
 
 var app = express();
 
-app.use(serveIndex('data'));
-app.use(express.static('data'));
+app.use('/data', serveIndex('data'));
+app.use('/data', express.static('data'));
+
+app.use(express.static('public'));
 
 app.listen(3000);
 

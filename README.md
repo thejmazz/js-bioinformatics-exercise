@@ -360,7 +360,118 @@ ncbi.search('protein', 'mbp1')
 ```
 
 and produces this
-[output][piped2.txt] which is newline delimited json.
+[output][piped2.txt] which is an array of objects.
+
+### Into the Browser
+
+At the moment, there is no standard way of importing modules in the browser.
+That is, `require` is undefined. With ES6 `import` and `export` will be
+available! We will use [Browserify](http://browserify.org/) to bundle our
+scripts from an entry point. Install browserify (`npm install -g browserify`)
+and bundle `piped2.js` into `bundle.js` with the debug option so we get source
+maps:
+
+```bash
+browserify piped2.js -o public/bundle.js --debug
+```
+
+Now, I actually get an error doing this:
+
+```bash
+Error: Cannot find module 'browserify-fs' from '/Users/jmazz/Documents/repos/js-bioinformatics-exercise/node_modules/bionode-ncbi/node_modules/bionode-fasta/lib'
+    ...
+```
+
+Perhaps someone missed the `--save` on `npm install browserify-fs`. Looking into
+`node_modules/bionode-ncbi/node_modules/bionode-fasta/package.json`, indeed, it
+is not in `dependencies`. But it is in `devDependencies`! And as well there is:
+
+```json
+"browser": {
+    "fs": "browserify-fs"
+}
+```
+
+The `browser` object is for browserify. So there definitely has been attempt
+to make this work. Either way, we can get around this by doing
+
+```
+browserify piped2.js -o public/bundle.js --debug -r fs:browserify-fs
+```
+
+as I gathered from the [browserify-fs readme](https://www.npmjs.com/package/browserify-fs). Another solution would
+have been to `npm install browserify-fs` inside `bionode-fasta`. However you
+should avoid modifying dependencies - and if you do - you should issue a pull
+request.
+
+Then create a simple `public/index.html`:
+
+```html
+<!doctype html>
+<html>
+    <body>
+        <script src="bundle.js"></script>
+    </body>
+</html>
+```
+
+With some small modifications to `server.js` we can get this running (It's important
+to run through a localhost since opening html files with the browser doesn't let
+you do as many things):
+
+```js
+app.use('/data', serveIndex('data'));
+app.use('/data', express.static('data'));
+
+app.use(express.static('public'));
+```
+
+View it in chrome and open up developer tools (`cmd`+`option`+`i` on OS X, or right-click->inspect). You will see there is an `Uncaught TypeError`:
+
+```
+Uncaught TypeError: Cannot read property 'write' of undefined, index.js:6
+```
+
+Expanding the error and looking through the trace, I find that line 43 makes
+this call:
+
+```js
+module.exports.stdout = module.exports(process.stdout);
+```
+
+where in line 5 and 6 we have
+
+```js
+module.exports = function(stream) {
+    var write = stream.write;
+    // ...
+}
+```
+
+Hmm, do we have `process` in the browser? Nope. Hence `process.stdout.write`
+will fail. Browserify is supposed to replace these things - see [advanced
+options](https://github.com/substack/node-browserify#usage). However, I think
+this requires `require('process')` to work? Passing in `--insert-globals` didn't
+do the trick either. After inspecting the code this was my hacky fix:
+
+In `node_modules/bionode-ncbi/node_modules/nugget/package.json` I added
+
+```json
+"browser": {
+    "single-line-log": false
+}
+```
+
+Essentially just ignoring the module that is causing the issue.
+[browser-stdout](https://github.com/kumavis/browser-stdout) and
+[process](https://www.npmjs.com/package/process) exist, and perhaps I'll put
+together a pull request implementing those sometime.
+
+Note: Most of the time, browserify works wonderfully! Pure-js modules will
+always work. Obviously there will be little issues when porting Node server code
+into the browser. It's unlikely the
+[single-line-log](https://github.com/freeall/single-line-log) author expected
+his module to be used in the browser.
 
 [jshint]: http://jshint.com/
 [bionode-ncbi]: https://github.com/bionode/bionode-ncbi

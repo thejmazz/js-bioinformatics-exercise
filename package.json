@@ -25,5 +25,6 @@
     "serve-index": "^1.7.2",
     "through2-filter": "^2.0.0",
     "tool-stream": "^0.2.1"
-  }
+  },
+  "devDependencies": {}
 }
