@@ -389,7 +389,32 @@ in there. Finally, when `tryFinish` discovers that we have in fact processed
 every file, it calls `cb` with the `null` as the error, and the produced data.
 
 Take a look at the [output][collect-seqs-output] `node collect-seqs.js`
-produces.
+produces. Lines `156` to `257` look interesting, they are all from
+*Saccharomyces cerevisiae* strains. Wonder how much conservation is there? For
+now though - let's just compare everything - the filtering function is not that
+clean and fairly  hardcoded. You might be beginning to notice what is called
+**callback hell**. There are methods to avoid this endlessly indented dread
+however - you can chain `.then()`s of [`Promise`s][promise-mdn] (See also
+[bluebird](https://github.com/petkaantonov/bluebird),
+[q](https://github.com/kriskowal/q)). ES6 introduces
+[generators](http://www.2ality.com/2015/03/no-promises.html) which are a neat
+type of "iterator" that you can pass in data to them mid state with
+`next(datum)`. Promises and generators can be combined (in a way which was not
+originally intended but works great!) and run through a "generator engine" of
+some sort (like [co](https://github.com/tj/co)) and the result is **asynchronous
+code that looks synchronous**. Co essentially implements what is in the draft
+for ES7, `async/await`. Check out [try-bionode-esnext][try-bionode-esnext] to
+see this next-next-generation JS put to use to consume callbacks without
+indenting. Extra note: `Promise.all([...])` is also quite useful and can be used
+to wait for a bunch of async operations to finish.
+
+That was quite a bit. But if you got here, and understand `collect-seqs.js`
+thats great. Coming to grips with callbacks is central to understanding how
+async operations are handled in a language that runs on one thread. You may
+think, wow, one thread that doesn't sound too great! But it actually makes for
+easily scalable RESTful APIs - on any request the server can take it without
+being stuck handling someone else - the callbacks will flow in when they are
+ready.  
 
 [jshint]: http://jshint.com/
 [bionode-ncbi]: https://github.com/bionode/bionode-ncbi
@@ -401,3 +426,4 @@ produces.
 [JSON-Formatter]: https://chrome.google.com/webstore/detail/json-formatter/bcjindcccaagfpapjjmafapmmgkkhgoa?hl=en
 [eFetch]: http://www.ncbi.nlm.nih.gov/books/NBK25497/table/chapter2.T._entrez_unique_identifiers_ui/?report=objectonly
 [collect-seqs-output]: https://github.com/thejmazz/js-bioinformatics-exercise/blob/master/outputs/collect-seqs.txt
+[promise-mdn](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Promise)
