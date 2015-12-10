@@ -390,7 +390,7 @@ every file, it calls `cb` with the `null` as the error, and the produced data.
 
 You might be beginning to notice what is called
 **callback hell**. There are methods to avoid this endlessly indented dread
-however - you can chain `.then()`s of [`Promise`s][promise-mdn] (See also
+however - you can chain `.then()`s of [Promises][promise-mdn] (See also
 [bluebird](https://github.com/petkaantonov/bluebird),
 [q](https://github.com/kriskowal/q)). ES6 introduces
 [generators](http://www.2ality.com/2015/03/no-promises.html) which are a neat
