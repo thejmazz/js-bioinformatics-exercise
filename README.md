@@ -109,6 +109,10 @@ example).
 
 At this point you can `ls data` and see what turned up!
 
+![protein-mbp1-jsons](img/protein-mbp1-jsons.png)
+
+There are quite a lot of results. These are all from different organisms. 
+
 [jshint]: http://jshint.com/
 [bionode-ncbi]: https://github.com/bionode/bionode-ncbi
 [slide-bionode-ncbi-api]: http://slides.com/jmazz/js-bioinformatics/fullscreen#/11
