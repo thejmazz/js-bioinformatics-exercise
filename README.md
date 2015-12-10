@@ -299,6 +299,95 @@ This returns:
 }
 ```
 
+Sweet, so we will be able to get sequences. However, not all of the search
+results are worth comparing - let's filter out the ones that have `mbp1` in
+their title. The following code achieves that, in `collect-seqs.js`:
+
+```js
+var fs = require('fs');
+
+// return array of uids of proteins with title containing `mbp1`
+function filter(proteins, cb) {
+    var num = 0;
+    var filtered = [];
+
+    var check = function(err, data) {
+        if (err) cb(err);
+
+        num+= 1;
+        var obj = JSON.parse(data);
+        if (obj.title !== undefined && obj.title.toUpperCase().indexOf('MBP1') >= 0) {
+            filtered.push(obj.uid);
+        }
+        tryFinish();
+    };
+
+    var tryFinish = function() {
+        if (num === proteins.length) {
+            cb(null, filtered);
+        }
+    };
+
+    proteins.forEach(function(protein) {
+        fs.readFile('data/' + protein, check);
+    });
+}
+
+filter(fs.readdirSync('data'), function(err, mbp1s) {
+    if (err) console.error(err);
+
+    mbp1s.forEach(function(uid) {
+        fs.readFile('data/' + uid + '.json', function(err, data) {
+            if (err) console.error(err);
+
+            var obj = JSON.parse(data);
+            console.log(obj.title);
+        });
+    });
+});
+```
+
+Now, that's pretty callback heavy. What is happening here and why? JavaScript
+has one event loop, and only one function can run at a time. Thus the standard
+way to *consume* asynchronous operations (i.e. those which will take time - for
+example, reading the contents of a file or waiting for a web request) is
+the idiomatic `function(err,data)`. For example, reading a file:
+
+```js
+fs.readFile('arbitraryBytes.ab', function(err, data) {
+    // handle error (poorly in this case)
+    if (err) console.error(err);
+
+    // do stuff with data!
+    var obj = JSON.parse(data);
+})
+```
+
+But how do we *produce* these asynchronous operations? We define a function
+that takes a **callback** function as a parameter. Then when everything is
+really done, we call that function with our result: `cb(null, data)` or if
+something goes wrong, pass the error to it: `cb(err)`.
+
+So what is happening in `filter`? First, we read every file that was passed
+in:
+
+```
+proteins.forEach(function(protein) {
+    fs.readFile('data/' + protein, check);
+});
+```
+
+Instead of writing an inline function, `check` is declared elsewhere. `check` is
+an *impure* function which has side effects - it increments `num` each time it
+is called. When `check` finished what it does it will call `tryFinish`. `tryFinish`
+simple checks if `num === proteins.length`, i.e. have all the files been read
+and parsed. We do not know the order that these files were processed - and it will
+be different each time. Thus, an alternative is to assign the result into a fixed
+index in an array (yes, `var a = []; a[5] = 'five'` is totally valid JS). In this
+case the order is not too important so I just through the uids in there. Finally,
+when `tryFinish` discovers that we have in fact processed every file, it calls
+`cb` with the data.
+
 [jshint]: http://jshint.com/
 [bionode-ncbi]: https://github.com/bionode/bionode-ncbi
 [slide-bionode-ncbi-api]: http://slides.com/jmazz/js-bioinformatics/fullscreen#/11
