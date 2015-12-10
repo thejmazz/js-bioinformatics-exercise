@@ -149,133 +149,9 @@ of the data we are dealing with..and more specifically, the general format. One
 way to generate a generic schema would be to loop through each file and keep
 track of the keys and `typeof(result[key])` that are common among all.
 
-This is what `1431055.json` looks like (disclaimer: I got `1431055` from the web
+Take a look at [1431055.json][1431055.json]. Disclaimer: I got `1431055` from the web
 results - instead of looking through each file - we could do that
-programmatically of course though):
-
-```json
-{
-    "uid": "1431055",
-    "caption": "CAA98618",
-    "title": "MBP1 [Saccharomyces cerevisiae]",
-    "extra": "gi|1431055|emb|CAA98618.1|",
-    "gi": 1431055,
-    "createdate": "1996/07/13",
-    "updatedate": "1997/08/11",
-    "flags": 0,
-    "taxid": 4932,
-    "slen": 833,
-    "biomol": "",
-    "moltype": "aa",
-    "topology": "linear",
-    "sourcedb": "insd",
-    "segsetsize": 0,
-    "projectid": "0",
-    "genome": "",
-    "subtype": "chromosome",
-    "subname": "IV",
-    "assemblygi": 0,
-    "assemblyacc": "",
-    "tech": "",
-    "completeness": "",
-    "geneticcode": "1",
-    "strand": "",
-    "organism": "baker's yeast",
-    "strain": "",
-    "statistics": [{
-        "type": "all",
-        "count": 4
-    }, {
-        "type": "blob_size",
-        "count": 3652
-    }, {
-        "type": "cdregion",
-        "count": 1
-    }, {
-        "type": "cdregion",
-        "subtype": "CDS",
-        "count": 1
-    }, {
-        "type": "gene",
-        "count": 1
-    }, {
-        "type": "gene",
-        "subtype": "Gene",
-        "count": 1
-    }, {
-        "type": "org",
-        "count": 1
-    }, {
-        "type": "prot",
-        "count": 1
-    }, {
-        "type": "prot",
-        "subtype": "Prot",
-        "count": 1
-    }, {
-        "type": "pub",
-        "count": 2
-    }, {
-        "type": "pub",
-        "subtype": "unpublished",
-        "count": 1
-    }, {
-        "source": "CDD",
-        "type": "all",
-        "count": 4
-    }, {
-        "source": "CDD",
-        "type": "region",
-        "count": 4
-    }, {
-        "source": "CDD",
-        "type": "region",
-        "subtype": "Region",
-        "count": 4
-    }, {
-        "source": "all",
-        "type": "all",
-        "count": 8
-    }, {
-        "source": "all",
-        "type": "blob_size",
-        "count": 3652
-    }, {
-        "source": "all",
-        "type": "cdregion",
-        "count": 1
-    }, {
-        "source": "all",
-        "type": "gene",
-        "count": 1
-    }, {
-        "source": "all",
-        "type": "org",
-        "count": 1
-    }, {
-        "source": "all",
-        "type": "prot",
-        "count": 1
-    }, {
-        "source": "all",
-        "type": "pub",
-        "count": 2
-    }, {
-        "source": "all",
-        "type": "region",
-        "count": 4
-    }],
-    "properties": {
-        "aa": "2",
-        "value": "2"
-    },
-    "oslt": {
-        "indexed": true,
-        "value": "CAA98618.1"
-    },
-    "accessionversion": "CAA98618.1"
-}
-```
+programmatically of course though.
 
 ## Multiple Sequence Alignment
 
@@ -494,3 +370,4 @@ and produces this
 [collect-seqs-output]: https://github.com/thejmazz/js-bioinformatics-exercise/blob/master/outputs/collect-seqs.txt
 [promise-mdn]:https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Promise
 [piped2.txt]:https://github.com/thejmazz/js-bioinformatics-exercise/blob/master/outputs/piped2.txt
+[1431055.json]:https://github.com/thejmazz/js-bioinformatics-exercise/blob/master/outputs/1431055.json 
