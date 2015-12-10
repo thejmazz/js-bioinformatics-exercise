@@ -388,11 +388,7 @@ valid JS). In this case the order is not too important so I just threw the uids
 in there. Finally, when `tryFinish` discovers that we have in fact processed
 every file, it calls `cb` with the `null` as the error, and the produced data.
 
-Take a look at the [output][collect-seqs-output] `node collect-seqs.js`
-produces. Lines `156` to `257` look interesting, they are all from
-*Saccharomyces cerevisiae* strains. Wonder how much conservation is there? For
-now though - let's just compare everything - the filtering function is not that
-clean and fairly  hardcoded. You might be beginning to notice what is called
+You might be beginning to notice what is called
 **callback hell**. There are methods to avoid this endlessly indented dread
 however - you can chain `.then()`s of [`Promise`s][promise-mdn] (See also
 [bluebird](https://github.com/petkaantonov/bluebird),
@@ -415,6 +411,12 @@ think, wow, one thread that doesn't sound too great! But it actually makes for
 easily scalable RESTful APIs - on any request the server can take it without
 being stuck handling someone else - the callbacks will flow in when they are
 ready.  
+
+Take a look at the [output][collect-seqs-output] `node collect-seqs.js`
+produces. Lines `156` to `257` look interesting, they are all from
+*Saccharomyces cerevisiae* strains. Wonder how much conservation is there? For
+now though - let's just compare everything - the filtering function is not that
+clean and fairly  hardcoded.
 
 [jshint]: http://jshint.com/
 [bionode-ncbi]: https://github.com/bionode/bionode-ncbi
