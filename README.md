@@ -340,19 +340,23 @@ There are a lot of `YJM*` strains - let's just take these out for now and
 compare `EC1118`, `R008`, `P301`, and `JAY291`. The regex is changed to `/^Mbp1p \[Saccharomyces cerevisiae [^Y]/` in `piped2.js` as well as some other changes:
 
 ```js
+var ncbi = require('bionode-ncbi');
+var es = require('event-stream');
+var filter = require('through2-filter');
+var concat = require('concat-stream');
+var tool = require('tool-stream');
+
+var concatStream = concat(function(array) {
+    console.log(array);
+});
+
 ncbi.search('protein', 'mbp1')
     .pipe(filter.obj(function (obj) {
         return obj.title.match(/^Mbp1p \[Saccharomyces cerevisiae [^Y]/);
     }))
-    .pipe(es.through(function (obj) {
-        this.emit('data', obj.gi + '\n');
-    }))
+    .pipe(tool.extractProperty('gi'))
     .pipe(ncbi.fetch('protein'))
-    .pipe(es.stringify())
-    .pipe(es.through(function (str) {
-        this.emit('data', str + '\n');
-    }))
-    .pipe(process.stdout);
+    .pipe(concatStream);
 ```
 
 and produces this
@@ -370,4 +374,4 @@ and produces this
 [collect-seqs-output]: https://github.com/thejmazz/js-bioinformatics-exercise/blob/master/outputs/collect-seqs.txt
 [promise-mdn]:https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Promise
 [piped2.txt]:https://github.com/thejmazz/js-bioinformatics-exercise/blob/master/outputs/piped2.txt
-[1431055.json]:https://github.com/thejmazz/js-bioinformatics-exercise/blob/master/outputs/1431055.json 
+[1431055.json]:https://github.com/thejmazz/js-bioinformatics-exercise/blob/master/outputs/1431055.json

@@ -1,5 +1,4 @@
 var ncbi = require('bionode-ncbi');
-// Stream utilities
 var es = require('event-stream');
 var filter = require('through2-filter');
 var concat = require('concat-stream');
