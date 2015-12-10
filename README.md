@@ -428,4 +428,4 @@ clean and fairly  hardcoded.
 [JSON-Formatter]: https://chrome.google.com/webstore/detail/json-formatter/bcjindcccaagfpapjjmafapmmgkkhgoa?hl=en
 [eFetch]: http://www.ncbi.nlm.nih.gov/books/NBK25497/table/chapter2.T._entrez_unique_identifiers_ui/?report=objectonly
 [collect-seqs-output]: https://github.com/thejmazz/js-bioinformatics-exercise/blob/master/outputs/collect-seqs.txt
-[promise-mdn](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Promise)
+[promise-mdn]:(https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Promise)
