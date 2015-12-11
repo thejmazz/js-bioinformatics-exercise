@@ -623,6 +623,22 @@ app.get('/aligned', function(req, res, next) {
 });
 ```
 
+I modularized `msa.js` a bit and added a little jQuery:
+
+```js
+function runFetch() {
+    $.get('http://localhost:3000/aligned').then(function(data) {
+        createMSAViz(data.seqs);
+    });
+}
+
+runFetch();
+```
+
+Now we have an actual MSA!
+
+![msa2](img/msa2.png)
+
 
 [jshint]: http://jshint.com/
 [bionode-ncbi]: https://github.com/bionode/bionode-ncbi

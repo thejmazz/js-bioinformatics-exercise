@@ -4,6 +4,7 @@ var es = require('event-stream');
 var filter = require('through2-filter');
 var concat = require('concat-stream');
 var tool = require('tool-stream');
+var $  = require('jquery');
 
 var msaDiv = document.createElement('div');
 msaDiv.innerHTML = 'Loading...';
@@ -54,4 +55,10 @@ function runPipe() {
         .pipe(concatStream);
 }
 
-runPipe();
+function runFetch() {
+    $.get('http://localhost:3000/aligned').then(function(data) {
+        createMSAViz(data.seqs);
+    });
+}
+
+runFetch();
