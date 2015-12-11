@@ -64,5 +64,3 @@ $('#submit').on('click', function() {
     msaDiv.innerHTML = 'Loading...';
     runFetch();
 });
-
-// runFetch();

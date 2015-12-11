@@ -30,7 +30,7 @@ app.get('/aligned', [
             },
             filters: [
                 function(obj) {
-                    // return propMatchRegex(obj, 'title', /^mbp1p?.*\[.*\]$/i);
+                    // e.g. /^mbp1.*\[.*\]$/i)
                     var regex = new RegExp('^' + req.query.q + '.*\\[.*\\]$', 'i');
                     return propMatchRegex(obj, 'title', regex);
                 }

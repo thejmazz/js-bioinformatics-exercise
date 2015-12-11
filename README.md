@@ -633,7 +633,7 @@ function getProteinSeqs(req, res, next) {
     var opts = req.opts;
 
     // var species = [];
-    var rMSA = cp.spawn('/Users/jmazz/r/js-bioinformatics-exercise/msa2.r');
+    var rMSA = cp.spawn('/Users/jmazz/r/js-bioinformatics-exercise/msa.r');
 
     var stream = ncbi.search('protein', opts.query);
 
@@ -695,10 +695,9 @@ var sMsa = require('./streamMsa');
 var propMatchRegex = sMsa.propMatchRegex;
 var getProteinSeqs = sMsa.getProteinSeqs;
 
-// e.g. /aligned?q=mbp1&match=title&regex=/^mbp1p?.*\[.*\]$/i
+// e.g. /aligned?q=mbp1
 app.get('/aligned', [
     function (req, res, next) {
-
         req.opts = {
             query: req.query.q,
             vars: {
@@ -706,7 +705,9 @@ app.get('/aligned', [
             },
             filters: [
                 function(obj) {
-                    return propMatchRegex(obj, req.query.match, new RegExp(req.query.regex));
+                    // e.g. /^mbp1.*\[.*\]$/i)
+                    var regex = new RegExp('^' + req.query.q + '.*\\[.*\\]$', 'i');
+                    return propMatchRegex(obj, 'title', regex);
                 }
             ],
             uniqueSpecies: true
@@ -728,15 +729,29 @@ I modularized `msa.js` a bit and added a little jQuery:
 
 ```js
 function runFetch() {
-    $.get('http://localhost:3000/aligned').then(function(data) {
+    $.get('http://localhost:3000/aligned?q=' + $('#query').val()).then(function(data) {
         createMSAViz(data.seqs);
     });
 }
 
-runFetch();
+$('#submit').on('click', function() {
+    msaDiv.innerHTML = 'Loading...';
+    runFetch();
+});
 ```
 
-Now we have an actual MSA!
+Which needs this HTML:
+
+```html
+<input type="text" id="query" placeholder="query"></input>
+<button id="submit">Go</button>
+```
+
+Now we have an actual MSA that takes a search query! It will filter
+down to results to everything that starts with the query, then has anything,
+then [specie], and only takes unique species. Of course it would be nicer
+to provide all these options from the interface but this serves as a minimal
+example.
 
 ![msa2](img/msa2.png)
 
