@@ -6,39 +6,70 @@ var tool = require('tool-stream');
 var cp = require('child_process');
 var ndjson = require('ndjson');
 
-var species = [];
+// Only supports one level deep property
+// i.e. car['wheels'] and not car['wheels.tire']
+// for that, do car.wheels['tire']
+function propMatchRegex(obj, prop, regex) {
+    return obj[prop].match(regex);
+}
 
-var rMSA = cp.spawn('/Users/jmazz/r/js-bioinformatics-exercise/msa2.r');
+function getProteinSeqs(opts) {
+    // var species = [];
+    var rMSA = cp.spawn('/Users/jmazz/r/js-bioinformatics-exercise/msa2.r');
 
-ncbi.search('protein', 'mbp1')
-    .pipe(filter.obj(function (obj) {
-        return obj.title.match(/^mbp1p?.*\[.*\]$/i);
-    }))
-    .pipe(filter.obj(function (obj) {
-        var specieName = obj.title.substring(obj.title.indexOf('[') + 1, obj.title.length-1);
-        specieName = specieName.split(' ').slice(0,1).join(' ');
-        if (species.indexOf(specieName) >= 0) {
-            return false;
-        } else {
-            species.push(specieName);
-            return true;
-        }
-    }))
-    .pipe(tool.extractProperty('gi'))
-    .pipe(ncbi.fetch('protein'))
-    .pipe(es.through(function (obj) {
-        this.emit('data', JSON.stringify(obj) + '\n');
-    }))
-    .pipe(rMSA.stdin);
+    var stream = ncbi.search('protein', opts.query);
 
-var seqs=[];
-rMSA.stdout
-    .pipe(ndjson.parse())
-    .on('data', function(data) {
-        seqs.push(data);
-    })
-    .on('end', function() {
-        console.log({
-            seqs: seqs
-        });
+    opts.filters.forEach(function (f) {
+        stream = stream.pipe(filter.obj(f));
     });
+
+    if (opts.uniqueSpecies) {
+        // This will actually belong to scope of function
+        var species=[];
+
+        stream = stream
+            .pipe(filter.obj(function (obj) {
+                var specieName = obj.title.substring(obj.title.indexOf('[') + 1, obj.title.length-1);
+                specieName = specieName.split(' ').slice(0,1).join(' ');
+                if (species.indexOf(specieName) >= 0) {
+                    return false;
+                } else {
+                    species.push(specieName);
+                    return true;
+                }
+            }));
+    }
+
+    stream
+        .pipe(tool.extractProperty('gi'))
+        .pipe(ncbi.fetch('protein'))
+        .pipe(es.through(function (obj) {
+            this.emit('data', JSON.stringify(obj) + '\n');
+        }))
+        .pipe(rMSA.stdin);
+
+    var seqs=[];
+    rMSA.stdout
+        .pipe(ndjson.parse())
+        .on('data', function(data) {
+            seqs.push(data);
+        })
+        .on('end', function() {
+            console.log({
+                seqs: seqs
+            });
+        });
+}
+
+getProteinSeqs({
+    query: 'mbp1',
+    vars: {
+        species: []
+    },
+    filters: [
+        function(obj) {
+            return propMatchRegex(obj, 'title', /^mbp1p?.*\[.*\]$/i);
+        }
+    ],
+    uniqueSpecies: true
+});
