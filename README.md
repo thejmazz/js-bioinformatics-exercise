@@ -12,10 +12,11 @@ Table of Contents
 * [Getting Dependencies](#getting-dependencies)
 * [bionode\-ncbi](#bionode-ncbi)
 * [Static File Server with Express](#static-file-server-with-express)
-* [Multiple Sequence Alignment](#multiple-sequence-alignment)
+* [NCBI Fetch](#ncbi-fetch)
+* [Callbacks](#callbacks)
 * [Pipes](#pipes)
-  * [Into the Browser](#into-the-browser)
-  * [BioJS: MSA](#biojs-msa)
+* [Into the Browser](#into-the-browser)
+* [BioJS: MSA](#biojs-msa)
 * [Interoperability with R](#interoperability-with-r)
 
 ## Setting up the project
@@ -155,18 +156,17 @@ Formatter](JSON-Formatter). This is what you should see:
 
 ![data-server](img/data-server.png)
 
-I like browsing through these JSONS more than the webpage search results. It
-just feels more semantic. Would be nice to implement left/right arrow to move
-between the files..but for now this suits our purposes to get a quick overview
-of the data we are dealing with..and more specifically, the general format. One
-way to generate a generic schema would be to loop through each file and keep
-track of the keys and `typeof(result[key])` that are common among all.
+Would be nice to implement left/right arrow to move between the files..but for
+now this suits our purposes to get a quick overview of the data we are dealing
+with and the general format. One way to generate a generic schema would be to
+loop through each file and keep track of the keys and `typeof(result[key])` that
+are common among all.
 
-Take a look at [1431055.json][1431055.json]. Disclaimer: I got `1431055` from the web
-results - instead of looking through each file - we could do that
+Take a look at [1431055.json][1431055.json]. Disclaimer: I got `1431055` from
+the web results - instead of looking through each file - we could do that
 programmatically of course though.
 
-## Multiple Sequence Alignment
+## NCBI Fetch
 
 We have all these results for Mbp1 proteins in different organisms - why not
 run an MSA and see if any regions are more conserved than others? To do this
@@ -187,6 +187,8 @@ This returns:
     "seq":"MSNQIYSARYSGVDVYEFIHSTGSIMKRKKDDWVNATHILKAANFAKAKRTRILEKEVLKETHEKVQGGFGKYQGTWVPLNIAKQLAEKFSVYDQLKPLFDFTQTDGSASPPPAPKHHHASKVDRKKAIRSASTSAIMETKRNNKKAEENQFQSSKILGNPTAAPRKRGRPVGSTRGSRRKLGVNLQRSQSDMGFPRPAIPNSSISTTQLPSIRSTMGPQSPTLGILEEERHDSRQQQPQQNNSAQFKEIDLEDGLSSDVEPSQQLQQVFNQNTGFVPQQQSSLIQTQQTESMATSVSSSPSLPTSPGDFADSNPFEERFPGGGTSPIISMIPRYPVTSRPQTSDINDKVNKYLSKLVDYFISNEMKSNKSLPQVLLHPPPHSAPYIDAPIDPELHTAFHWACSMGNLPIAEALYEAGTSIRSTNSQGQTPLMRSSLFHNSYTRRTFPRIFQLLHETVFDIDSQSQTVIHHIVKRKSTTPSAVYYLDVVLSKIKDFSPQYRIELLLNTQDKNGDTALHIASKNGDVVFFNTLVKMGALTTISNKEGLTANEIMNQQYEQMMIQNGTNQHVNSSNTDLNIHVNTNNIETKNDVNSMVIMSPVSPSDYITYPSQIATNISRNIPNVVNSMKQMASIYNDLHEQHDNEIKSLQKTLKSISKTKIQVSLKTLEVLKESSKDENGEAQTNDDFEILSRLQEQNTKKLRKRLIRYKRLIKQKLEYRQTVLLNKLIEDETQATTNNTVEKDNNTLERLELAQELTMLQLQRKNKLSSLVKKFEDNAKIHKYRRIIREGTEMNIEEVDSSLDVILQTLIANNNKNKGAEQIITISNANSHA"
 }
 ```
+
+## Callbacks
 
 Sweet, so we will be able to get sequences. However, not all of the search
 results are worth comparing - let's filter out the ones that have `mbp1` in
@@ -388,7 +390,7 @@ in the browser with biojs-msa as if they all align from the start. Why?
 That we can do totally within the browser - but as far as I know there is
 no MSA implementation in JavaScript.
 
-### Into the Browser
+## Into the Browser
 
 At the moment, there is no standard way of importing modules in the browser.
 That is, `require` is undefined. With ES6 `import` and `export` will be
@@ -511,7 +513,7 @@ I've written
 for this, and added it the postinstall script. So now at least anyone pulling
 *this* repository won't have those issues.
 
-### BioJS: MSA
+## BioJS: MSA
 
 Browsing through the [msa readme](https://github.com/greenify/msa), I took the
 "b) Import your own seqs" snippet and the "sequence model", to produce `msa.js`:
@@ -565,6 +567,8 @@ uses [msa](https://bioconductor.org/packages/release/bioc/html/msa.html) from
 Bioconductor to align our sequences. In `msa.r`:
 
 ```r
+#!/usr/bin/env rscript
+
 # Packages
 if (!require(Biostrings, quietly=TRUE)) {
     source("https://bioconductor.org/biocLite.R")
@@ -582,9 +586,12 @@ if (!require(jsonlite, quietly=TRUE)) {
     install.packages("jsonlite")
 }
 
-# File descriptor for reading sequence data
-fdR <- file("outputs/seqs.ndjson", "r")
-seqs <- stream_in(fdR)
+# Open stdin connection
+stdin <- file("stdin")
+open(stdin)
+
+# jsonlite parse stdin ndjson into data frame
+seqs <- stream_in(stdin, verbose=FALSE)
 
 # Create AAStringSet vector out of sequences
 seqSet <- AAStringSet(c(seqs$seq))
@@ -600,17 +607,16 @@ for (i in 1:nrow(msa)) {
     seqs$seq[i] = as.character(msa@unmasked[i][[1]])
 }
 
-# File descriptor for writing
-fdW <- file("outputs/seqsAligned.ndjson", "wb")
-# Convert seqs to ndjson and write to file
-stream_out(seqs, fdW)
+# Back to stdout
+stream_out(seqs, verbose=FALSE)
 ```
 
 Now, how to interact with this and JS? Well, its impossible to do it in the
 browser. We can integrate this script into an Express API easily and then
 request the aligned sequences from the frontend. R  has support for pipes and
 socket connections, which `stream_in` and `stream_out` from jsonlite can use. So
-perhaps this R script can be made to fit into the stream in Node. See
+perhaps this R script can be made to fit into the stream in Node. To use `msa.r`
+as a child process, it needs to be executable: `chmod u+x msa.r`. See
 `streamMsa.js`:
 
 ```js
@@ -723,7 +729,9 @@ Here our "handler stack" is an array of functions which follow `function
 (request, response, next)`. We attach `opts` to the `req` object so
 `getProteinSeqs` can retrieve them.  See [writing
 middleware](http://expressjs.com/en/guide/writing-middleware.html) for more
-info.
+info. [body-parser](https://www.npmjs.com/package/body-parser) is middleware
+which creates an object of url queries for you at `req.query`. It can also
+parse JSON (e.g. from PUT bodies) but we don't use that.
 
 I modularized `msa.js` a bit and added a little jQuery:
 
