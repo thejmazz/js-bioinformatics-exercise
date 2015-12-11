@@ -55,13 +55,13 @@ function getProteinSeqs(opts) {
             seqs.push(data);
         })
         .on('end', function() {
-            console.log({
+            return {
                 seqs: seqs
-            });
+            };
         });
 }
 
-getProteinSeqs({
+var foo = getProteinSeqs({
     query: 'mbp1',
     vars: {
         species: []
@@ -73,3 +73,5 @@ getProteinSeqs({
     ],
     uniqueSpecies: true
 });
+
+console.log(foo);
