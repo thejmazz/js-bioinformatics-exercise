@@ -483,23 +483,32 @@ for this, and added it the postinstall script. So now at least anyone pulling
 ### BioJS: MSA
 
 Browsing through the [msa readme](https://github.com/greenify/msa), I took the
-"b) Import your own seqs" snippet and added in a console.log, `msa.js`:
+"b) Import your own seqs" snippet and the "sequence model", to produce `msa.js`:
 
 ```js
 var msa = require("msa");
-var sequences = msa.utils.seqgen.genConservedSequences(10,30, "ACGT-");
-console.log(sequences);
+// other requires from piped2.js
 
 var msaDiv = document.createElement('div');
 document.body.appendChild(msaDiv);
 
-var m = new msa({
-    el: msaDiv,
-    seqs: sequences
-});
-m.render();
+var concatStream = concat(function(sequences) {
+    sequences = sequences.map(function(seq) {
+        var props = seq.id.split('|');
+        seq.id = props[1];
+        seq.name = props[4];
+        return seq;
+    });
 
-// contents of piped2.js
+    console.log(sequences);
+    var m = new msa({
+        el: msaDiv,
+        seqs: sequences
+    });
+    m.render();
+});
+
+// ncbi.search from piped2.js
 ```
 
 Then ran `npm run bundle`. (see `scripts` in `package.json`). I logged `sequences`
