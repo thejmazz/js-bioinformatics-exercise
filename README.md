@@ -369,7 +369,11 @@ ncbi.search('protein', 'mbp1')
 ```
 
 and produces this
-[output][piped2.txt] which is an array of objects.
+[output][piped2.txt] which is an array of objects. Note the sequences are of
+quite varying lengths. For now, we won't perform a MSA and will view it
+in the browser with biojs-msa as if they all align from the start. Why?
+That we can do totally within the browser - but as far as I know there is
+no MSA implementation in JavaScript.
 
 ### Into the Browser
 
