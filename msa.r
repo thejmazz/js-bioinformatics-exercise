@@ -34,6 +34,6 @@ for (i in 1:nrow(msa)) {
 }
 
 # File descriptor for writing
-fdW <- file("outputs/seqsAligned.ndjson")
+fdW <- file("outputs/seqsAligned.ndjson", "wb")
 # Convert seqs to ndjson and write to file
 stream_out(seqs, fdW)

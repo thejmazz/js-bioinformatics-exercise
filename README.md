@@ -536,7 +536,7 @@ can change row order and find motifs (via RegEx) for example.
 
 ![msa](img/msa1.png)
 
-## interoperability with R
+## Interoperability with R
 
 Check [piped3.js](https://github.com/thejmazz/js-bioinformatics-exercise/blob/master/piped3.js). It produces a `.ndjson` file, or newline delimited JSON. [jsonlite](https://cran.r-project.org/web/packages/jsonlite/jsonlite.pdf) on CRAN
 supports streaming of JSON, but only through ndjson. The following R script
@@ -580,14 +580,14 @@ for (i in 1:nrow(msa)) {
 }
 
 # File descriptor for writing
-fdW <- file("outputs/seqsAligned.ndjson")
+fdW <- file("outputs/seqsAligned.ndjson", "wb")
 # Convert seqs to ndjson and write to file
 stream_out(seqs, fdW)
 ```
 
 Now, how to interact with this and JS? Well, its impossible to do it in the
 browser. We can integrate this script into an Express API easily enough
-however, and then request the aligned sequences from the frontend. 
+however, and then request the aligned sequences from the frontend.
 
 
 [jshint]: http://jshint.com/
