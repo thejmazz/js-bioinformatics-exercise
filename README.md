@@ -8,16 +8,15 @@ The tutorial for this [exercise][exercise] as part of my presentation on [JavaSc
 Table of Contents
 =================
 
-  * [js\-bioinformatics\-exercise](#js-bioinformatics-exercise)
-    * [Setting up the project](#setting-up-the-project)
-    * [Getting Dependencies](#getting-dependencies)
-    * [bionode\-ncbi](#bionode-ncbi)
-    * [Static File Server with Express](#static-file-server-with-express)
-    * [Multiple Sequence Alignment](#multiple-sequence-alignment)
-    * [Pipes](#pipes)
-      * [Into the Browser](#into-the-browser)
-      * [BioJS: MSA](#biojs-msa)
-    * [Interoperability with R](#interoperability-with-r)
+* [Setting up the project](#setting-up-the-project)
+* [Getting Dependencies](#getting-dependencies)
+* [bionode\-ncbi](#bionode-ncbi)
+* [Static File Server with Express](#static-file-server-with-express)
+* [Multiple Sequence Alignment](#multiple-sequence-alignment)
+* [Pipes](#pipes)
+  * [Into the Browser](#into-the-browser)
+  * [BioJS: MSA](#biojs-msa)
+* [Interoperability with R](#interoperability-with-r)
 
 ## Setting up the project
 
