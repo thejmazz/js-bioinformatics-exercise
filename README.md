@@ -417,11 +417,16 @@ have been to `npm install browserify-fs` inside `bionode-fasta`. However you
 should avoid modifying dependencies - and if you do - you should issue a pull
 request.
 
-Then create a simple `public/index.html`:
+Then create a simple `public/index.html` (I got the css from
+[here](https://cdn.biojs.net/msa/0.3/msa.min.gz.css)):
 
 ```html
 <!doctype html>
 <html>
+    <head>
+        <title biojs msa visualization> </title>
+        <link rel="stylesheet" href="msa.min.css" />
+    </head>
     <body>
         <script src="bundle.js"></script>
     </body>
