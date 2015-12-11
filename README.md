@@ -292,10 +292,7 @@ being stuck handling someone else - the callbacks will flow in when they are
 ready.  
 
 Take a look at the [output][collect-seqs-output] `node collect-seqs.js`
-produces. Lines `156` to `257` look interesting, they are all from
-*Saccharomyces cerevisiae* strains. Wonder how much conservation is there? For
-now though - let's just compare everything - the filtering function is not that
-clean and fairly  hardcoded.
+produces.
 
 ## Pipes
 
@@ -322,7 +319,7 @@ var filter = require('through2-filter');
 
 ncbi.search('protein', 'mbp1')
     .pipe(filter.obj(function (obj) {
-        return obj.title.match(/^Mbp1p \[Saccharomyces cerevisiae/);
+        return obj.title.match(/^mbp1p?.*\[.*\]$/i);
     }))
     .pipe(es.through(function (data) {
         this.emit('data', data.title + '\n');
