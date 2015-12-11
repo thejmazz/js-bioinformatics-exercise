@@ -7,7 +7,6 @@ var tool = require('tool-stream');
 var $  = require('jquery');
 
 var msaDiv = document.createElement('div');
-msaDiv.innerHTML = 'Loading...';
 document.body.appendChild(msaDiv);
 
 var concatStream = concat(function(sequences) {
@@ -56,9 +55,14 @@ function runPipe() {
 }
 
 function runFetch() {
-    $.get('http://localhost:3000/aligned?q=mbp1&match=title&regex=^mbp1p?.*\[.*\]$').then(function(data) {
+    $.get('http://localhost:3000/aligned?q=' + $('#query').val()).then(function(data) {
         createMSAViz(data.seqs);
     });
 }
 
-runFetch();
+$('#submit').on('click', function() {
+    msaDiv.innerHTML = 'Loading...';
+    runFetch();
+});
+
+// runFetch();
