@@ -488,12 +488,16 @@ Browsing through the [msa readme](https://github.com/greenify/msa), I took the
 ```js
 var msa = require("msa");
 var sequences = msa.utils.seqgen.genConservedSequences(10,30, "ACGT-");
+console.log(sequences);
+
+var msaDiv = document.createElement('div');
+document.body.appendChild(msaDiv);
 
 var m = new msa({
-    el: rootDiv,
+    el: msaDiv,
     seqs: sequences
 });
-m.render()
+m.render();
 
 // contents of piped2.js
 ```
