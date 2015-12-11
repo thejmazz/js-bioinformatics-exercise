@@ -688,20 +688,25 @@ module.exports = {
 The corresponding GET request at `/aligned` in `server.js`:
 
 ```js
+var bodyParser = require('body-parser');
+app.use(bodyParser.urlencoded({extended: true}));
+
 var sMsa = require('./streamMsa');
 var propMatchRegex = sMsa.propMatchRegex;
 var getProteinSeqs = sMsa.getProteinSeqs;
 
+// e.g. /aligned?q=mbp1&match=title&regex=/^mbp1p?.*\[.*\]$/i
 app.get('/aligned', [
     function (req, res, next) {
+
         req.opts = {
-            query: 'mbp1',
+            query: req.query.q,
             vars: {
                 species: []
             },
             filters: [
                 function(obj) {
-                    return propMatchRegex(obj, 'title', /^mbp1p?.*\[.*\]$/i);
+                    return propMatchRegex(obj, req.query.match, new RegExp(req.query.regex));
                 }
             ],
             uniqueSpecies: true
@@ -712,6 +717,12 @@ app.get('/aligned', [
     getProteinSeqs
 ]);
 ```
+
+Here our "handler stack" is an array of functions which follow `function
+(request, response, next)`. We attach `opts` to the `req` object so
+`getProteinSeqs` can retrieve them.  See [writing
+middleware](http://expressjs.com/en/guide/writing-middleware.html) for more
+info.
 
 I modularized `msa.js` a bit and added a little jQuery:
 

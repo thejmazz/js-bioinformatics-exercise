@@ -56,7 +56,7 @@ function runPipe() {
 }
 
 function runFetch() {
-    $.get('http://localhost:3000/aligned').then(function(data) {
+    $.get('http://localhost:3000/aligned?q=mbp1&match=title&regex=^mbp1p?.*\[.*\]$').then(function(data) {
         createMSAViz(data.seqs);
     });
 }

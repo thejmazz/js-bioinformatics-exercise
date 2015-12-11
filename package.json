@@ -21,6 +21,7 @@
   "homepage": "https://github.com/thejmazz/js-bioinformatics-exercise#readme",
   "dependencies": {
     "bionode-ncbi": "^1.6.0",
+    "body-parser": "^1.14.1",
     "concat-stream": "^1.5.1",
     "event-stream": "^3.3.2",
     "express": "^4.13.3",

@@ -3,6 +3,7 @@ var serveIndex = require('serve-index');
 var ndjson = require('ndjson');
 var concat = require('concat-stream');
 var es = require('event-stream');
+var bodyParser = require('body-parser');
 
 var sMsa = require('./streamMsa');
 var propMatchRegex = sMsa.propMatchRegex;
@@ -10,11 +11,14 @@ var getProteinSeqs = sMsa.getProteinSeqs;
 
 var app = express();
 
+app.use(bodyParser.urlencoded({extended: true}));
+
 // app.use('/data', serveIndex('data'));
 // app.use('/data', express.static('data'));
 
 app.use(express.static('public'));
 
+// e.g. /aligned?q=mbp1&match=title&regex=^mbp1p?.*\[.*\]$
 app.get('/aligned', [
     function (req, res, next) {
         req.opts = {

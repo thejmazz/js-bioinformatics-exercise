@@ -17,7 +17,7 @@ function getProteinSeqs(req, res, next) {
     var opts = req.opts;
 
     // var species = [];
-    var rMSA = cp.spawn('/Users/jmazz/r/js-bioinformatics-exercise/msa2.r');
+    var rMSA = cp.spawn('/Users/jmazz/r/js-bioinformatics-exercise/msa.r');
 
     var stream = ncbi.search('protein', opts.query);
 
