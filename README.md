@@ -483,7 +483,7 @@ which apparently is not being passed due to this hack working..
 together a pull request implementing those sometime.
 
 Note: Most of the time, browserify works wonderfully! Pure-js modules will
-always work. Obviously there will be little issues when porting Node server code
+always work. Obviously there will be some issues when porting Node server code
 into the browser. It's unlikely the
 [single-line-log](https://github.com/freeall/single-line-log) author expected
 his module to be used in the browser.
@@ -524,10 +524,11 @@ var concatStream = concat(function(sequences) {
 // ncbi.search from piped2.js
 ```
 
-Then ran `npm run bundle`. (see `scripts` in `package.json`). Here's what
-it looks like! The format is a bit messed up, there's probably some settings
-we are missing. Perhaps not surprisingly, these sequences only differ at one position!
-So this is perhaps not the best MSA example.
+Then ran `npm run bundle`. (see `scripts` in `package.json`).
+
+Here's what it looks like! The format is a bit messed up, there's probably some
+settings we are missing. The [demo](http://msa.biojs.net/app/) will be useful
+for inspected the source and fixing ours.
 
 ![msa](img/msa1.png)
 
