@@ -1,24 +1,27 @@
 var msa = require("msa");
-var sequences = msa.utils.seqgen.genConservedSequences(10,30, "ACGT-");
-console.log(sequences);
-
-var msaDiv = document.createElement('div');
-document.body.appendChild(msaDiv);
-
-var m = new msa({
-    el: msaDiv,
-    seqs: sequences
-});
-m.render();
-
 var ncbi = require('bionode-ncbi');
 var es = require('event-stream');
 var filter = require('through2-filter');
 var concat = require('concat-stream');
 var tool = require('tool-stream');
 
-var concatStream = concat(function(array) {
-    console.log(array);
+var msaDiv = document.createElement('div');
+document.body.appendChild(msaDiv);
+
+var concatStream = concat(function(sequences) {
+    sequences = sequences.map(function(seq) {
+        var props = seq.id.split('|');
+        seq.id = props[1];
+        seq.name = props[4];
+        return seq;
+    });
+
+    console.log(sequences);
+    var m = new msa({
+        el: msaDiv,
+        seqs: sequences
+    });
+    m.render();
 });
 
 ncbi.search('protein', 'mbp1')
