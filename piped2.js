@@ -8,9 +8,21 @@ var concatStream = concat(function(array) {
     console.log(array);
 });
 
+var species = [];
+
 ncbi.search('protein', 'mbp1')
     .pipe(filter.obj(function (obj) {
-        return obj.title.match(/^Mbp1p \[Saccharomyces cerevisiae [^Y]/);
+        return obj.title.match(/^mbp1p?.*\[.*\]$/i);
+    }))
+    .pipe(filter.obj(function (obj) {
+        var specieName = obj.title.substring(obj.title.indexOf('[') + 1, obj.title.length-1);
+        specieName = specieName.split(' ').slice(0,1).join(' ');
+        if (species.indexOf(specieName) >= 0) {
+            return false;
+        } else {
+            species.push(specieName);
+            return true;
+        }
     }))
     .pipe(tool.extractProperty('gi'))
     .pipe(ncbi.fetch('protein'))

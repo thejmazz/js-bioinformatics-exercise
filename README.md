@@ -333,8 +333,8 @@ Why didn't we just do this in the first place you might ask? It's very important
 to understand callbacks - also, these different approaches may be superior
 in different scenarios.
 
-There are a lot of `YJM*` strains - let's just take these out for now and
-compare `EC1118`, `R008`, `P301`, and `JAY291`. The regex is changed to `/^Mbp1p \[Saccharomyces cerevisiae [^Y]/` in `piped2.js` as well as some other changes:
+Lets filter it down to just different species, extract the `gi` id,
+and fetch the sequence. In `piped2.js`:
 
 ```js
 var ncbi = require('bionode-ncbi');
@@ -347,9 +347,21 @@ var concatStream = concat(function(array) {
     console.log(array);
 });
 
+var species = [];
+
 ncbi.search('protein', 'mbp1')
     .pipe(filter.obj(function (obj) {
-        return obj.title.match(/^Mbp1p \[Saccharomyces cerevisiae [^Y]/);
+        return obj.title.match(/^mbp1p?.*\[.*\]$/i);
+    }))
+    .pipe(filter.obj(function (obj) {
+        var specieName = obj.title.substring(obj.title.indexOf('[') + 1, obj.title.length-1);
+        specieName = specieName.split(' ').slice(0,1).join(' ');
+        if (species.indexOf(specieName) >= 0) {
+            return false;
+        } else {
+            species.push(specieName);
+            return true;
+        }
     }))
     .pipe(tool.extractProperty('gi'))
     .pipe(ncbi.fetch('protein'))
