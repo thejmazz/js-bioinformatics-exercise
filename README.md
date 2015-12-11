@@ -511,15 +511,12 @@ var concatStream = concat(function(sequences) {
 // ncbi.search from piped2.js
 ```
 
-Then ran `npm run bundle`. (see `scripts` in `package.json`). I logged `sequences`
-so I can determine the schema msa wants..something which was missing from their
-documentation. Comparing the generated array, and our pipe created array,
-they look fairly similar.
+Then ran `npm run bundle`. (see `scripts` in `package.json`). Here's what
+it looks like! The format is a bit messed up, there's probably some settings
+we are missing. Perhaps not surprisingly, these sequences only differ at one position!
+So this is perhaps not the best MSA example.
 
 ![msa](img/msa1.png)
-
-We just need to refine `id`, produce `name`. `meta` is an empty object so we
-can probably leave that for now.
 
 
 [jshint]: http://jshint.com/
