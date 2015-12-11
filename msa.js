@@ -6,6 +6,7 @@ var concat = require('concat-stream');
 var tool = require('tool-stream');
 
 var msaDiv = document.createElement('div');
+msaDiv.innerHTML = 'Loading...';
 document.body.appendChild(msaDiv);
 
 var concatStream = concat(function(sequences) {
@@ -16,11 +17,15 @@ var concatStream = concat(function(sequences) {
         return seq;
     });
 
-    console.log(sequences);
     var m = new msa({
         el: msaDiv,
         seqs: sequences
     });
+
+    var menu = new msa.menu.defaultmenu({
+        msa: m
+    });
+    m.addView('menu', menu);
     m.render();
 });
 

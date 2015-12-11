@@ -531,9 +531,8 @@ var concatStream = concat(function(sequences) {
 
 Then ran `npm run bundle`. (see `scripts` in `package.json`).
 
-Here's what it looks like! The format is a bit messed up, there's probably some
-settings we are missing. The [demo](http://msa.biojs.net/app/) will be useful
-for inspected the source and fixing ours.
+Here's what it looks like! Be sure to play a bit with the controls. You
+can change row order and find motifs (via RegEx) for example.
 
 ![msa](img/msa1.png)
 
