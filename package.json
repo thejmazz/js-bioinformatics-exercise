@@ -24,7 +24,9 @@
     "concat-stream": "^1.5.1",
     "event-stream": "^3.3.2",
     "express": "^4.13.3",
+    "jquery": "^2.1.4",
     "msa": "^0.4.8",
+    "ndjson": "^1.4.3",
     "serve-index": "^1.7.2",
     "through2-filter": "^2.0.0",
     "tool-stream": "^0.2.1"

@@ -587,7 +587,41 @@ stream_out(seqs, fdW)
 
 Now, how to interact with this and JS? Well, its impossible to do it in the
 browser. We can integrate this script into an Express API easily enough
-however, and then request the aligned sequences from the frontend.
+however, and then request the aligned sequences from the frontend. R also
+has support for pipes and socket connections, which stream_in and stream_out
+from jsonlite can use. So perhaps this R script can be made to fit into
+the stream in Node. Alternatively, we can just call a child process in Node
+with `rscript msa.r`, wait for it to finish, read+parse the output file,
+and send the data to the frontend.
+
+For now, just to see it work, we can read the already existing
+`seqsAligned.ndjson` file.
+
+Add a GET request at `/aligned` in `server.js`:
+
+```js
+app.get('/aligned', function(req, res, next) {
+    // Using sketchy callback-esque technique since concat-stream was throwing errors..
+    var alignedSeqs = 'outputs/seqsAligned.ndjson';
+    // Assumes newline at end of file..
+    numLines = (fs.readFileSync(alignedSeqs, 'utf8')).split('\n').length - 1;
+
+    var seqs = [];
+
+    var trySend = function(sequence) {
+        seqs.push(sequence);
+        if (seqs.length === numLines) {
+            res.send({
+                seqs: seqs
+            });
+        }
+    };
+
+    fs.createReadStream(alignedSeqs)
+        .pipe(ndjson.parse())
+        .on('data', trySend);
+});
+```
 
 
 [jshint]: http://jshint.com/
