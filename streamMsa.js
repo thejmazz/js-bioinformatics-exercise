@@ -13,7 +13,9 @@ function propMatchRegex(obj, prop, regex) {
     return obj[prop].match(regex);
 }
 
-function getProteinSeqs(opts) {
+function getProteinSeqs(req, res, next) {
+    var opts = req.opts;
+
     // var species = [];
     var rMSA = cp.spawn('/Users/jmazz/r/js-bioinformatics-exercise/msa2.r');
 
@@ -55,23 +57,13 @@ function getProteinSeqs(opts) {
             seqs.push(data);
         })
         .on('end', function() {
-            return {
+            res.send({
                 seqs: seqs
-            };
+            });
         });
 }
 
-var foo = getProteinSeqs({
-    query: 'mbp1',
-    vars: {
-        species: []
-    },
-    filters: [
-        function(obj) {
-            return propMatchRegex(obj, 'title', /^mbp1p?.*\[.*\]$/i);
-        }
-    ],
-    uniqueSpecies: true
-});
-
-console.log(foo);
+module.exports = {
+    getProteinSeqs: getProteinSeqs,
+    propMatchRegex: propMatchRegex
+};

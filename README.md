@@ -551,7 +551,15 @@ can change row order and find motifs (via RegEx) for example.
 
 ## Interoperability with R
 
-Check [piped3.js](https://github.com/thejmazz/js-bioinformatics-exercise/blob/master/piped3.js). It produces a `.ndjson` file, or newline delimited JSON. [jsonlite](https://cran.r-project.org/web/packages/jsonlite/jsonlite.pdf) on CRAN
+Check
+[piped3.js](https://github.com/thejmazz/js-bioinformatics-exercise/blob/master/piped3.js).
+It produces a `.ndjson` file, or newline delimited JSON. It's output is in
+[seqs.ndjson](https://github.com/thejmazz/js-bioinformatics-exercise/blob/master/outputs/seqs.ndjson).
+Using that as input, the msa bioconductor package produces
+[seqsAligned.ndjson](https://github.com/thejmazz/js-bioinformatics-exercise/blob/master/outputs/seqsAligned.ndjson).
+But these are files. We want to work with streams!
+
+[jsonlite](https://cran.r-project.org/web/packages/jsonlite/jsonlite.pdf) on CRAN
 supports streaming of JSON, but only through ndjson. The following R script
 uses [msa](https://bioconductor.org/packages/release/bioc/html/msa.html) from
 Bioconductor to align our sequences. In `msa.r`:
@@ -599,41 +607,110 @@ stream_out(seqs, fdW)
 ```
 
 Now, how to interact with this and JS? Well, its impossible to do it in the
-browser. We can integrate this script into an Express API easily enough
-however, and then request the aligned sequences from the frontend. R also
-has support for pipes and socket connections, which stream_in and stream_out
-from jsonlite can use. So perhaps this R script can be made to fit into
-the stream in Node. Alternatively, we can just call a child process in Node
-with `rscript msa.r`, wait for it to finish, read+parse the output file,
-and send the data to the frontend.
-
-For now, just to see it work, we can read the already existing
-`seqsAligned.ndjson` file.
-
-Add a GET request at `/aligned` in `server.js`:
+browser. We can integrate this script into an Express API easily and then
+request the aligned sequences from the frontend. R  has support for pipes and
+socket connections, which `stream_in` and `stream_out` from jsonlite can use. So
+perhaps this R script can be made to fit into the stream in Node. See
+`streamMsa.js`:
 
 ```js
-app.get('/aligned', function(req, res, next) {
-    // Using sketchy callback-esque technique since concat-stream was throwing errors..
-    var alignedSeqs = 'outputs/seqsAligned.ndjson';
-    // Assumes newline at end of file..
-    numLines = (fs.readFileSync(alignedSeqs, 'utf8')).split('\n').length - 1;
+var ncbi = require('bionode-ncbi');
+var es = require('event-stream');
+var filter = require('through2-filter');
+var concat = require('concat-stream');
+var tool = require('tool-stream');
+var cp = require('child_process');
+var ndjson = require('ndjson');
 
-    var seqs = [];
+// Only supports one level deep property
+// i.e. car['wheels'] and not car['wheels.tire']
+// for that, do car.wheels['tire']
+function propMatchRegex(obj, prop, regex) {
+    return obj[prop].match(regex);
+}
 
-    var trySend = function(sequence) {
-        seqs.push(sequence);
-        if (seqs.length === numLines) {
+function getProteinSeqs(req, res, next) {
+    var opts = req.opts;
+
+    // var species = [];
+    var rMSA = cp.spawn('/Users/jmazz/r/js-bioinformatics-exercise/msa2.r');
+
+    var stream = ncbi.search('protein', opts.query);
+
+    opts.filters.forEach(function (f) {
+        stream = stream.pipe(filter.obj(f));
+    });
+
+    if (opts.uniqueSpecies) {
+        // This will actually belong to scope of function
+        var species=[];
+
+        stream = stream
+            .pipe(filter.obj(function (obj) {
+                var specieName = obj.title.substring(obj.title.indexOf('[') + 1, obj.title.length-1);
+                specieName = specieName.split(' ').slice(0,1).join(' ');
+                if (species.indexOf(specieName) >= 0) {
+                    return false;
+                } else {
+                    species.push(specieName);
+                    return true;
+                }
+            }));
+    }
+
+    stream
+        .pipe(tool.extractProperty('gi'))
+        .pipe(ncbi.fetch('protein'))
+        .pipe(es.through(function (obj) {
+            this.emit('data', JSON.stringify(obj) + '\n');
+        }))
+        .pipe(rMSA.stdin);
+
+    var seqs=[];
+    rMSA.stdout
+        .pipe(ndjson.parse())
+        .on('data', function(data) {
+            seqs.push(data);
+        })
+        .on('end', function() {
             res.send({
                 seqs: seqs
             });
-        }
-    };
+        });
+}
 
-    fs.createReadStream(alignedSeqs)
-        .pipe(ndjson.parse())
-        .on('data', trySend);
-});
+module.exports = {
+    getProteinSeqs: getProteinSeqs,
+    propMatchRegex: propMatchRegex
+};
+```
+
+The corresponding GET request at `/aligned` in `server.js`:
+
+```js
+var sMsa = require('./streamMsa');
+var propMatchRegex = sMsa.propMatchRegex;
+var getProteinSeqs = sMsa.getProteinSeqs;
+
+app.get('/aligned', [
+    function (req, res, next) {
+        req.opts = {
+            query: 'mbp1',
+            vars: {
+                species: []
+            },
+            filters: [
+                function(obj) {
+                    return propMatchRegex(obj, 'title', /^mbp1p?.*\[.*\]$/i);
+                }
+            ],
+            uniqueSpecies: true
+        };
+
+        next();
+    },
+    getProteinSeqs
+]);
 ```
 
 I modularized `msa.js` a bit and added a little jQuery:

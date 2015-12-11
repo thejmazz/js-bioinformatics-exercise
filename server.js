@@ -3,7 +3,10 @@ var serveIndex = require('serve-index');
 var ndjson = require('ndjson');
 var concat = require('concat-stream');
 var es = require('event-stream');
-var fs = require('fs');
+
+var sMsa = require('./streamMsa');
+var propMatchRegex = sMsa.propMatchRegex;
+var getProteinSeqs = sMsa.getProteinSeqs;
 
 var app = express();
 
@@ -12,27 +15,25 @@ var app = express();
 
 app.use(express.static('public'));
 
-app.get('/aligned', function(req, res, next) {
-    // Using sketchy callback-esque technique since concat-stream was throwing errors..
-    var alignedSeqs = 'outputs/seqsAligned.ndjson';
-    // Assumes newline at end of file..
-    numLines = (fs.readFileSync(alignedSeqs, 'utf8')).split('\n').length - 1;
+app.get('/aligned', [
+    function (req, res, next) {
+        req.opts = {
+            query: 'mbp1',
+            vars: {
+                species: []
+            },
+            filters: [
+                function(obj) {
+                    return propMatchRegex(obj, 'title', /^mbp1p?.*\[.*\]$/i);
+                }
+            ],
+            uniqueSpecies: true
+        };
 
-    var seqs = [];
-
-    var trySend = function(sequence) {
-        seqs.push(sequence);
-        if (seqs.length === numLines) {
-            res.send({
-                seqs: seqs
-            });
-        }
-    };
-
-    fs.createReadStream(alignedSeqs)
-        .pipe(ndjson.parse())
-        .on('data', trySend);
-});
+        next();
+    },
+    getProteinSeqs
+]);
 
 
 app.listen(3000);

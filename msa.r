@@ -1,3 +1,5 @@
+#!/usr/bin/env rscript
+
 # Packages
 if (!require(Biostrings, quietly=TRUE)) {
     source("https://bioconductor.org/biocLite.R")
@@ -15,9 +17,12 @@ if (!require(jsonlite, quietly=TRUE)) {
     install.packages("jsonlite")
 }
 
-# File descriptor for reading sequence data
-fdR <- file("outputs/seqs.ndjson", "r")
-seqs <- stream_in(fdR)
+# Open stdin connection
+stdin <- file("stdin")
+open(stdin)
+
+# jsonlite parse stdin ndjson into data frame
+seqs <- stream_in(stdin, verbose=FALSE)
 
 # Create AAStringSet vector out of sequences
 seqSet <- AAStringSet(c(seqs$seq))
@@ -33,7 +38,5 @@ for (i in 1:nrow(msa)) {
     seqs$seq[i] = as.character(msa@unmasked[i][[1]])
 }
 
-# File descriptor for writing
-fdW <- file("outputs/seqsAligned.ndjson", "wb")
-# Convert seqs to ndjson and write to file
-stream_out(seqs, fdW)
+# Back to stdout
+stream_out(seqs, verbose=FALSE)
