@@ -5,6 +5,23 @@ The tutorial for this [exercise][exercise] as part of my presentation on [JavaSc
 [exercise]: https://slides.com/jmazz/js-bioinformatics/fullscreen#/37
 [js-and-bioinformatics]: https://slides.com/jmazz/js-bioinformatics/fullscreen
 
+This tutorial will walk you through creating a small web app which
+* accesses the NCBI with [bionode-ncbi][bionode-ncbi]
+* performs a multiple sequence alignment with [muscle][muscle] through [msa][msa]
+* visualizes the results with [biojs-msa][biojs-msa]
+
+You will learn how to consume *and* produce functions with the callback style,
+as well as ample experience with Node's [streams][streams]. You will construct a
+(simple) RESTful API with [Express][express]. [browserify][browserify] will be
+demonstrated as a tool for bundling code. Interoperability with R will be
+achieved by communicating between Node and an R script with stdio pipes
+and [jsonlite][jsonlite]. 
+
+[muscle]:http://www.biomedcentral.com/content/pdf/1471-2105-5-113.pdf
+[msa]:https://bioconductor.org/packages/release/bioc/html/msa.html
+[streams]:https://nodejs.org/api/stream.html
+[jsonlite]:https://cran.r-project.org/web/packages/jsonlite/jsonlite.pdf
+
 Table of Contents
 =================
 
