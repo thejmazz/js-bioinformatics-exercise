@@ -10,35 +10,40 @@ This tutorial will walk you through creating a small web app which
 * performs a multiple sequence alignment with [muscle][muscle] through [msa][msa]
 * visualizes the results with [biojs-msa][biojs-msa]
 
-First, and introduction to creating an npm package and installing dependencies.
+First, an introduction to creating an npm package and installing dependencies.
 Consuming *and* producing functions with the callback style will be explained,
-as well as ample experience with Node's [streams][streams]. You will construct a
-(simple) RESTful API with [Express][express]. [browserify][browserify] will be
-demonstrated as a tool for bundling code. Interoperability with R will be
+as well as providing ample experience with Node's [streams][streams]. You will
+construct a (simple) RESTful API with [Express][express].
+[browserify][browserify] will be demonstrated as a tool for bundling code,
+letting you use npm packages in the browser. Interoperability with R will be
 achieved by communicating between Node and an R script with stdio pipes and
 [jsonlite][jsonlite].
 
 Note, none of the heavy algorithmic lifting will be performed by JavaScript. So
 why then this push for **scientific computing in JS**? Well speed and memory
 intensive programs are nearly always written in C/C++. For example, msa from
-Bioconductor wraps binaries. [SciPy][SciPy] also uses native code. JavaScript
-engines such as [V8][V8] from Google, [SpiderMonkey][SpiderMonkey] from Mozilla
-and [Chakra][Chakra] from Microsoft Edge have been getting faster and faster.
-See  [JS vs Python][JSvsPython] and these [benchmarks][benchmarks] from the
-Julia project. Speed is important for large tasks yes, but languages are
-normally chosen over others for their available packages. While it is true npm
-is the largest collection of open source modules, these are mostly related to
-web development.  The communities for scientific computing in Python/CPython and
-bioinformatics in R with bioconductor have years of development and much more
-refined packages to chose from. But..the heavy lifting..is still done in C.  C
-can and has been wrapped in Node in a variety of modules. V8 *is* C++ after all.
-Furthermore [emscripten][emscripten] is a [LLVM][LLVM]-to-JavaScript compiler. It
-can compile into [asm.js][asm.js] which is a low-level subset of JS. Engines can
+Bioconductor provides an "interface to the multiple sequence alignment
+algorithms ClustalW, ClustalOmega, and Muscle". [SciPy][SciPy] also uses native
+code. JavaScript engines such as [V8][V8] from Google,
+[SpiderMonkey][SpiderMonkey] from Mozilla and [Chakra][Chakra] from Microsoft
+Edge have been getting faster and faster. See  [JS vs Python][JSvsPython] and
+these [benchmarks][benchmarks] from the Julia project. Speed is important for
+large tasks yes, but languages are normally chosen over others for their
+available packages. While it is true npm is the largest collection of open
+source modules, these are mostly related to web development.  The communities
+for scientific computing in Python/CPython and bioinformatics in R with
+bioconductor have years of development and much more refined packages to chose
+from. But..the heavy lifting..is still done in C.  C can and has been wrapped in
+Node in a variety of modules (see: [node-gyp][node-gyp]). V8 *is* C++ after all. Furthermore
+[emscripten][emscripten] is a [LLVM][LLVM]-to-JavaScript compiler. It can
+compile into [asm.js][asm.js] which is a low-level subset of JS. Engines can
 recognize asm and make optimizations - you can end up with native code running
 as JS in the browser at about 70% the speed! Another exciting development is
-[WebAssembly][WebAssembly] which is called Web**Assembly** for a reason - it will
-let you compile C into a binary format that can run in the browser. So is the
-future set? Will scientific computing in JS become popular? I sure hope so:
+[WebAssembly][WebAssembly] - it
+will let you compile C into a binary format that can run in the browser, with more
+languages coming down the road. So is
+the future set? Will scientific computing in JS become popular? I sure hope so:
+
 * JS is the **language of the web** and is here to stay *and* evolve
 * The *best* way to share **high fidelity data visualizations** is over the browser with JS and WebGL
 * Electron can be used to create cross-platform desktop apps written in JS with file system access
@@ -48,10 +53,12 @@ future set? Will scientific computing in JS become popular? I sure hope so:
 For more discussions regarding the implementation of these technologies and others
 (GPU computation for example), see [codeforscience/webdata][https://github.com/codeforscience/webdata/blob/master/README.md].
 
+[node-gyp]:https://github.com/nodejs/node-gyp
+[SciPy]:http://www.scipy.org/
 [WebAssembly]:https://medium.com/javascript-scene/what-is-webassembly-the-dawn-of-a-new-era-61256ec5a8f6#.sxsmd4vyp
 [asm.js]:https://github.com/dherman/asm.js/
 [LLVM]:https://en.wikipedia.org/wiki/LLVM
-[emscripten]:http://emscripten.org/
+[emscripten]:http://kripken.github.io/mloc_emscripten_talk/#/
 [benchmarks]:http://julialang.org/benchmarks/
 [JSvsPython]:http://benchmarksgame.alioth.debian.org/u64q/compare.php?lang=v8&lang2=python3
 [V8]:https://developers.google.com/v8/?hl=en
