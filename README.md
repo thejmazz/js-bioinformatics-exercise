@@ -10,17 +10,59 @@ This tutorial will walk you through creating a small web app which
 * performs a multiple sequence alignment with [muscle][muscle] through [msa][msa]
 * visualizes the results with [biojs-msa][biojs-msa]
 
-You will learn how to consume *and* produce functions with the callback style,
+First, and introduction to creating an npm package and installing dependencies.
+Consuming *and* producing functions with the callback style will be explained,
 as well as ample experience with Node's [streams][streams]. You will construct a
 (simple) RESTful API with [Express][express]. [browserify][browserify] will be
 demonstrated as a tool for bundling code. Interoperability with R will be
-achieved by communicating between Node and an R script with stdio pipes
-and [jsonlite][jsonlite]. 
+achieved by communicating between Node and an R script with stdio pipes and
+[jsonlite][jsonlite].
 
+Note, none of the heavy algorithmic lifting will be performed by JavaScript. So
+why then this push for **scientific computing in JS**? Well speed and memory
+intensive programs are nearly always written in C/C++. For example, msa from
+Bioconductor wraps binaries. [SciPy][SciPy] also uses native code. JavaScript
+engines such as [V8][V8] from Google, [SpiderMonkey][SpiderMonkey] from Mozilla
+and [Chakra][Chakra] from Microsoft Edge have been getting faster and faster.
+See  [JS vs Python][JSvsPython] and these [benchmarks][benchmarks] from the
+Julia project. Speed is important for large tasks yes, but languages are
+normally chosen over others for their available packages. While it is true npm
+is the largest collection of open source modules, these are mostly related to
+web development.  The communities for scientific computing in Python/CPython and
+bioinformatics in R with bioconductor have years of development and much more
+refined packages to chose from. But..the heavy lifting..is still done in C.  C
+can and has been wrapped in Node in a variety of modules. V8 *is* C++ after all.
+Furthermore [emscripten][emscripten] is a [LLVM][LLVM]-to-JavaScript compiler. It
+can compile into [asm.js][asm.js] which is a low-level subset of JS. Engines can
+recognize asm and make optimizations - you can end up with native code running
+as JS in the browser at about 70% the speed! Another exciting development is
+[WebAssembly][WebAssembly] which is called Web**Assembly** for a reason - it will
+let you compile C into a binary format that can run in the browser. So is the
+future set? Will scientific computing in JS become popular? I sure hope so:
+* JS is the **language of the web** and is here to stay *and* evolve
+* The *best* way to share **high fidelity data visualizations** is over the browser with JS and WebGL
+* Electron can be used to create cross-platform desktop apps written in JS with file system access
+* C programs can be wrapped in Node and are beginning to be compiled into asm.js. **WebAssembly is coming**! (Thus the only boundary to msa for instance being implemented in Node is developers to write the glue)
+* JS for searching and downloading data can be used on the **server and in the browser**. This can simplify development of bioinformatics web applications.
+
+For more discussions regarding the implementation of these technologies and others
+(GPU computation for example), see [codeforscience/webdata][https://github.com/codeforscience/webdata/blob/master/README.md].
+
+[WebAssembly]:https://medium.com/javascript-scene/what-is-webassembly-the-dawn-of-a-new-era-61256ec5a8f6#.sxsmd4vyp
+[asm.js]:https://github.com/dherman/asm.js/
+[LLVM]:https://en.wikipedia.org/wiki/LLVM
+[emscripten]:http://emscripten.org/
+[benchmarks]:http://julialang.org/benchmarks/
+[JSvsPython]:http://benchmarksgame.alioth.debian.org/u64q/compare.php?lang=v8&lang2=python3
+[V8]:https://developers.google.com/v8/?hl=en
+[biojs-msa]:http://msa.biojs.net/
 [muscle]:http://www.biomedcentral.com/content/pdf/1471-2105-5-113.pdf
 [msa]:https://bioconductor.org/packages/release/bioc/html/msa.html
 [streams]:https://nodejs.org/api/stream.html
 [jsonlite]:https://cran.r-project.org/web/packages/jsonlite/jsonlite.pdf
+[browserify]:http://browserify.org/
+[SpiderMonkey]:https://developer.mozilla.org/en-US/docs/Mozilla/Projects/SpiderMonkey
+[Chakra]:https://blogs.windows.com/msedgedev/tag/chakra/
 
 Table of Contents
 =================
