@@ -51,7 +51,7 @@ the future set? Will scientific computing in JS become popular? I sure hope so:
 * JS for searching and downloading data can be used on the **server and in the browser**. This can simplify development of bioinformatics web applications.
 
 For more discussions regarding the implementation of these technologies and others
-(GPU computation for example), see [codeforscience/webdata][https://github.com/codeforscience/webdata/blob/master/README.md].
+(GPU computation for example), see [codeforscience/webdata](https://github.com/codeforscience/webdata/blob/master/README.md).
 
 [node-gyp]:https://github.com/nodejs/node-gyp
 [SciPy]:http://www.scipy.org/
