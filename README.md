@@ -47,7 +47,8 @@ the future set? Will scientific computing in JS become popular? I sure hope so:
 * JS is the **language of the web** and is here to stay *and* evolve
 * The *best* way to share **high fidelity data visualizations** is over the browser with JS and WebGL
 * Electron can be used to create cross-platform desktop apps written in JS with file system access
-* C programs can be wrapped in Node and are beginning to be compiled into asm.js. **WebAssembly is coming**! (Thus the only boundary to msa for instance being implemented in Node is developers to write the glue)
+* C programs can be **wrapped in Node** and are beginning to be compiled into asm.js. Thus the only boundary to msa for instance being implemented in Node is developers to write the glue.
+* **WebAssembly is coming**!
 * JS for searching and downloading data can be used on the **server and in the browser**. This can simplify development of bioinformatics web applications.
 
 For more discussions regarding the implementation of these technologies and others
