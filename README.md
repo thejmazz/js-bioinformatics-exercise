@@ -52,6 +52,7 @@ the future set? Will scientific computing in JS become popular? I sure hope so:
 
 For more discussions regarding the implementation of these technologies and others
 (GPU computation for example), see [codeforscience/webdata](https://github.com/codeforscience/webdata/blob/master/README.md).
+As well a talk from Max Ogden of the Dat project, [JavaScript, For Science!](https://www.youtube.com/watch?v=_3oykSKOito).
 
 [node-gyp]:https://github.com/nodejs/node-gyp
 [SciPy]:http://www.scipy.org/
