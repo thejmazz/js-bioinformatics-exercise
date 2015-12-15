@@ -89,7 +89,7 @@ Table of Contents
 
 ## Setting up the project
 
-The first thing you do when starting any modern JavaScript project is initialize
+[Install Node](https://gist.github.com/thejmazz/72456e3f29cf0bf56d4a) if you haven't done so already. The first thing you do when starting any modern JavaScript project is initialize
 it (`cd` into your project directory and):
 
 ```bash
