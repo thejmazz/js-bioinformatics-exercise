@@ -1,6 +1,6 @@
 # js-bioinformatics-exercise
 
-The tutorial for this [exercise][exercise] as part of my presentation on [JavaScript and Bioinformatics][js-and-bioinformatics].
+The tutorial for this [exercise][exercise] as part of my presentation on [JavaScript and Bioinformatics][js-and-bioinformatics]. Here it is an overview as a [slide deck](https://thejmazz.github.io/pres-bionode-r).
 
 [exercise]: https://slides.com/jmazz/js-bioinformatics/fullscreen#/37
 [js-and-bioinformatics]: https://slides.com/jmazz/js-bioinformatics/fullscreen
